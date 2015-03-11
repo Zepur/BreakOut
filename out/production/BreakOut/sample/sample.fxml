@@ -6,28 +6,29 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="playWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-   <children>
-      <Pane fx:id="gameWindow" layoutX="250.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseMoved="#movePad" prefHeight="520.0" prefWidth="800.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Rectangle fx:id="player" arcHeight="10.0" arcWidth="10.0" fill="#80764b" height="10.0" layoutX="65.0" layoutY="300.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0" />
-            <Rectangle fx:id="gamePaddle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="12.0" layoutY="438.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 8; -fx-arc-width: 8;" width="70.0" />
-            <Rectangle fx:id="clickToPlay" arcHeight="5.0" arcWidth="5.0" fill="#a3ff1f7d" height="526.0" layoutX="-2.0" layoutY="-5.0" onMousePressed="#setup" stroke="BLACK" strokeType="INSIDE" width="806.0" />
-         </children></Pane>
-      <Label fx:id="scoreLabel" layoutX="38.0" layoutY="552.0" style="-fx-font-size: 14; -fx-font-weight: bold;" text="Score:" textFill="#ffae2c">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label fx:id="score" layoutX="102.0" layoutY="550.0" prefHeight="25.0" prefWidth="121.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-font-style: italic;" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label fx:id="gameName" layoutX="604.0" layoutY="533.0" style="-fx-font-weight: bold; -fx-font-size: 40; -fx-font-style: oblique;" text="ZepShoot" textAlignment="RIGHT" textFill="#29ab36">
-         <font>
-            <Font name="Calibri" size="40.0" />
-         </font>
-      </Label>
-   </children>
+<AnchorPane fx:id="playWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseMoved="#movePad" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+        <Pane fx:id="gameWindow" layoutX="250.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="800.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Rectangle fx:id="gamePaddle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="12.0" layoutY="438.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 8; -fx-arc-width: 8;" width="70.0" />
+                <Rectangle fx:id="clickToPlay" arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="526.0" layoutX="-2.0" layoutY="-5.0" onMousePressed="#setup" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="806.0" />
+                <Label fx:id="clickToPlayLabel" layoutX="231.0" layoutY="203.0" onMousePressed="#setup" style="-fx-font-size: 60;" text="Click to play!" textAlignment="CENTER" textFill="#fff600" />
+                <Circle fx:id="playerCircle" fill="DODGERBLUE" layoutX="100.0" layoutY="420.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            </children></Pane>
+        <Label fx:id="scoreLabel" layoutX="38.0" layoutY="552.0" style="-fx-font-size: 14; -fx-font-weight: bold;" text="Score:" textFill="#ffae2c">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Label fx:id="score" layoutX="102.0" layoutY="550.0" prefHeight="25.0" prefWidth="121.0" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-font-style: italic;" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Label fx:id="gameName" layoutX="604.0" layoutY="533.0" style="-fx-font-weight: bold; -fx-font-size: 40; -fx-font-style: oblique;" text="ZepShoot" textAlignment="RIGHT" textFill="#29ab36">
+            <font>
+                <Font name="Calibri" size="40.0" />
+            </font>
+        </Label>
+    </children>
 </AnchorPane>
