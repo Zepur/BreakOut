@@ -6,10 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -18,6 +20,7 @@ import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 
 public class Controller {
@@ -34,147 +37,213 @@ public class Controller {
     @FXML
     Label score;
     @FXML
+    Label clickToPlayLabel;
+    @FXML
     Circle playerCircle;
     @FXML
-    Rectangle clickToPlay;
+    Button easy;
     @FXML
-    Label clickToPlayLabel;
+    Button hard;
+//    private static int luck = 0;
+    Timeline loop;
     public static double speedX;
     public static double speedY;
     private static int scoreInt = 0;
-    private static GridPane gpane = new GridPane();
-    private static Rectangle testRect;
     private static ArrayList<Rectangle> rects = new ArrayList<Rectangle>();
 
     public void movePad(MouseEvent e) {
-        double boundsRight = (810- gamePaddle.getWidth());
+        double boundsRight = (810 - gamePaddle.getWidth());
         score.setText(String.valueOf(scoreInt));
-        gamePaddle.setX(e.getX());
-        if(gamePaddle.getX()>=boundsRight)
-            gamePaddle.setX(boundsRight-1);
-        if(gamePaddle.getX()<=0)
+        gamePaddle.setX(e.getX()-(gamePaddle.getWidth()/2));
+        if (gamePaddle.getX() >= boundsRight)
+            gamePaddle.setX(boundsRight - 1);
+        if (gamePaddle.getX() <= 0)
             gamePaddle.setX(1);
     }
 
     public static void setupBall(int diff) {
-        speedX = diff;
-        switch(diff){
+        speedX = 1;
+        switch (diff) {
             case 1:
-                speedY = 3;
+                speedY = 1;
                 break;
             case 2:
-                speedY = 3.5;
+                speedY = 1;
                 break;
             default:
-                speedY = 4;
+                speedY = 1;
         }
     }
 
-    public void playBall(){
+    public void playBall(int speedValue) {
+        test(speedValue);
         loop.setCycleCount(Timeline.INDEFINITE);
         loop.play();
     }
 
-    final Timeline loop = new Timeline(new KeyFrame(Duration.millis(15), new EventHandler<ActionEvent>() {
+    public void test(int oli){
+        loop = new Timeline(new KeyFrame(Duration.millis(oli), new EventHandler<ActionEvent>() {
 
-        double deltaX = 1;
-        double deltaY = 1;
+            @Override
+            public void handle(final ActionEvent t) {
+                playerCircle.setLayoutX(playerCircle.getLayoutX() + speedX);
+                playerCircle.setLayoutY(playerCircle.getLayoutY() - speedY);
 
-        @Override
-        public void handle(final ActionEvent t) {
-            playerCircle.setLayoutX(playerCircle.getLayoutX() + deltaX);
-            playerCircle.setLayoutY(playerCircle.getLayoutY() - deltaY);
+                boolean test = false;
+                Shape intersectShape = Shape.intersect(playerCircle, gamePaddle);
+                if (intersectShape.getBoundsInLocal().getWidth() != -1) {
+                    test = true;
+                }
+                boolean atRightBorder = playerCircle.getLayoutX()+playerCircle.getRadius() >= gameWindow.getWidth();
+                boolean atLeftBorder = playerCircle.getLayoutX()-playerCircle.getRadius() <= 0;
+                boolean atBottomBorder = playerCircle.getLayoutY() >= gameWindow.getHeight()-20;
+                boolean atTopBorder = playerCircle.getLayoutY()-playerCircle.getRadius() <= 0;
 
-            boolean test = false;
-            Shape intersectShape = Shape.intersect(playerCircle, gamePaddle);
-            if (intersectShape.getBoundsInLocal().getWidth() != -1) {
-                test = true;
+                if (atRightBorder || atLeftBorder)
+                    speedX = -speedX;
+                if (atTopBorder)
+                    speedY = -speedY;
+                if (test) {
+                    speedY = -speedY;
+                    scoreInt += 12;
+                }
+                if (atBottomBorder) {
+                    gameOver();
+                }
+                try {
+                    for (Rectangle testRect : rects) {
+
+                        boolean xx = ((playerCircle.getLayoutX() > (testRect.getLayoutX() - playerCircle.getRadius())) && (playerCircle.getLayoutX() < (testRect.getLayoutX() + testRect.getWidth() + playerCircle.getRadius())));
+                        boolean yy = ((playerCircle.getLayoutY() < testRect.getLayoutY() + playerCircle.getRadius() + testRect.getHeight()) && (playerCircle.getLayoutY() > testRect.getLayoutY() - playerCircle.getRadius()));
+                        boolean left = (playerCircle.getLayoutX() - (testRect.getLayoutX() + playerCircle.getRadius())) == 0.5;
+                        boolean right = ((testRect.getLayoutX() + testRect.getWidth() + playerCircle.getRadius()) - playerCircle.getLayoutX()) == 0.5;
+                        boolean bottom = playerCircle.getLayoutY() == testRect.getLayoutY() + testRect.getHeight() + playerCircle.getRadius();
+                        boolean top = playerCircle.getLayoutY() == (testRect.getLayoutY() - playerCircle.getRadius());
+
+                        if ((right || left) && yy) {
+                            rects.remove(testRect);
+                            gameWindow.getChildren().remove(testRect);
+                            speedX = -speedX;
+//                                Random rand = new Random();
+//                                luck = rand.nextInt(10);
+                        }
+                        if (xx && (top || bottom)) {
+                            rects.remove(testRect);
+                            gameWindow.getChildren().remove(testRect);
+                            speedY = -speedY;
+//                                Random rand = new Random();
+//                                luck = rand.nextInt(10);
+                        }
+                    }
+//                    luckyYou(luck);
+//                    luck = 0;
+                } catch (ConcurrentModificationException e) {
+                    //e.printStackTrace();
+                }
+
             }
-            boolean atRightBorder = playerCircle.getLayoutX() >= 800;
-            boolean atLeftBorder = playerCircle.getLayoutX() <= 1;
-            boolean atBottomBorder = playerCircle.getLayoutY() >= 500;
-            boolean atTopBorder = playerCircle.getLayoutY() <= 4;
+        }));
+    }
 
-            if (atRightBorder || atLeftBorder)
-                deltaX = -deltaX;
-            if (atTopBorder)
-                deltaY = -deltaY;
-            if (test) {
-                deltaY = -deltaY;
-                scoreInt += 12;
-            }
-            if (atBottomBorder) {
-                gameOver();
-            }
-
-            for(Rectangle testRect : rects) {
-                boolean yy = ((playerCircle.getLayoutY() < testRect.getLayoutY() + playerCircle.getRadius() + testRect.getHeight()) && (playerCircle.getLayoutY() > testRect.getLayoutY() - playerCircle.getRadius()));
-                boolean xx = ((playerCircle.getLayoutX() > (testRect.getLayoutX() - playerCircle.getRadius())) && (playerCircle.getLayoutX() < (testRect.getLayoutX() + testRect.getWidth() + playerCircle.getRadius())));
-                boolean left = playerCircle.getLayoutX() == testRect.getLayoutX() + playerCircle.getRadius();
-                boolean right = testRect.getLayoutX() + testRect.getWidth() + playerCircle.getRadius() - playerCircle.getLayoutX() == 0;
-                boolean bottom = playerCircle.getLayoutY() == testRect.getLayoutY() + testRect.getHeight() + playerCircle.getRadius();
-                boolean top = playerCircle.getLayoutY() == testRect.getLayoutY() + playerCircle.getRadius();
-
-                if ((right || left) && yy)
-                    deltaX = -deltaX;
-                if (xx && (top || bottom))
-                    deltaY = -deltaY;
-            }
-        }
-    }));
+//    private void luckyYou(int luck) {
+//        if(luck >= 3) {
+//            Circle luckyCircle = new Circle(20, Color.HOTPINK);
+//            Label luckyLabel = new Label("<- +++ ->");
+//            luckyCircle.setLayoutX(400 - luckyCircle.getRadius());
+//            luckyCircle.setLayoutY(380);
+//            luckyLabel.setTextFill(Color.WHITE);
+//            luckyLabel.setLayoutX(400 - luckyLabel.getWidth());
+//            luckyLabel.setLayoutY(380);
+//            gameWindow.getChildren().add(luckyCircle);
+//            gameWindow.getChildren().add(luckyLabel);
+//        }
+//    }
 
     private void getBricks() {
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(-75.0f);
 
-        gpane.setHgap(3);
-        gpane.setVgap(3);
-        int num = 0;
-        for(int i = 0; i < 10;i++){
-            for(int j = 0; j < 8; j++){
-                if(i<=1) {
-                    Rectangle r = new Rectangle(65, 20, Color.RED);
-                    r.setDisable(false);
-                    rects.add(r);
+        Lighting lightEffect = new Lighting();
+        lightEffect.setLight(light);
+        lightEffect.setSurfaceScale(3.4f);
+
+        int hgap = 2, vgap = 2, brickWidth = 38, brickHeight = 20;
+        double snax = (gameWindow.getWidth()-(581))/2;
+
+        for(int row = 0; row < 15; row++){
+            for(int column = 0; column < 10; column++){
+                switch (column){
+                    case 0:
+                    case 5:
+                        Rectangle brickDODGERBLUE = new Rectangle(brickWidth, brickHeight, Color.DODGERBLUE);
+                        brickDODGERBLUE.setLayoutX(snax+(row*brickDODGERBLUE.getWidth())+(hgap*row));
+                        brickDODGERBLUE.setLayoutY(brickWidth +(column * brickDODGERBLUE.getHeight())+ (vgap*column));
+                        rects.add(brickDODGERBLUE);
+                        break;
+                    case 1:
+                    case 6:
+                        Rectangle brickLAWNGREEN = new Rectangle(brickWidth, brickHeight, Color.LAWNGREEN);
+                        brickLAWNGREEN.setLayoutX(snax+(row*brickLAWNGREEN.getWidth())+(hgap*row));
+                        brickLAWNGREEN.setLayoutY(brickWidth +(column * brickLAWNGREEN.getHeight())+ (vgap*column));
+                        rects.add(brickLAWNGREEN);
+                        break;
+                    case 2:
+                    case 7:
+                        Rectangle brickORANGE = new Rectangle(brickWidth, brickHeight, Color.ORANGE);
+                        brickORANGE.setLayoutX(snax+(row*brickORANGE.getWidth())+(hgap*row));
+                        brickORANGE.setLayoutY(brickWidth +(column * brickORANGE.getHeight())+ (vgap*column));
+                        rects.add(brickORANGE);
+                        break;
+                    case 3:
+                    case 8:
+                        Rectangle brickINDIANRED = new Rectangle(brickWidth, brickHeight, Color.INDIANRED);
+                        brickINDIANRED.setLayoutX(snax+(row*brickINDIANRED.getWidth())+(hgap*row));
+                        brickINDIANRED.setLayoutY(brickWidth +(column * brickINDIANRED.getHeight())+ (vgap*column));
+                        rects.add(brickINDIANRED);
+                        break;
+                    case 4:
+                    case 9:
+                        Rectangle brickFUCHSIA = new Rectangle(brickWidth, brickHeight, Color.FUCHSIA);
+                        brickFUCHSIA.setLayoutX(snax+(row*brickFUCHSIA.getWidth())+(hgap*row));
+                        brickFUCHSIA.setLayoutY(brickWidth +(column * brickFUCHSIA.getHeight())+ (vgap*column));
+                        rects.add(brickFUCHSIA);
+                        break;
                 }
-                else if(j==2)
-                    rects.add(new Rectangle(65, 20, Color.YELLOW));
-                else if(j==3)
-                    rects.add(new Rectangle(65, 20, Color.DARKORANGE));
-                else if(j==4)
-                    rects.add(new Rectangle(65, 20, Color.CHOCOLATE));
-                else if(j==5)
-                    rects.add(new Rectangle(65, 20, Color.CRIMSON));
-                else if(j==6)
-                    rects.add(new Rectangle(65, 20, Color.DARKSEAGREEN));
-                else if(j==7)
-                    rects.add(new Rectangle(65, 20, Color.LIMEGREEN));
-                else {
-                    Rectangle r = new Rectangle(65, 20, Color.RED);
-                    r.setDisable(true);
-                    rects.add(r);
-                }
-                gpane.add(rects.get(num), i, j);
-                System.out.println(i + " - " + j);
-                num++;
             }
         }
-        gameWindow.getChildren().addAll(gpane);
+
+        for(Rectangle rect : rects){
+            rect.setEffect(lightEffect);
+            gameWindow.getChildren().add(rect);
+        }
     }
 
     private void gameOver(){
-        score.setText("YOU LOST");
         playerCircle.setVisible(false);
         loop.stop();
         clickToPlayLabel.setText("GAME OVER!");
     }
 
-    public void setup(){
+    public void setup(int num){
+        gameWindow.setStyle("-fx-background-color: cornsilk;");
         gameWindow.setCursor(Cursor.NONE);
         clickToPlayLabel.setText("");
         getBricks();
-        clickToPlay.setVisible(false);
+        easy.setVisible(false);
+        hard.setVisible(false);
         int diff = 1;
         setupBall(diff);
-        playBall();
+        playBall(num);
+    }
+
+    public void startEasy(){
+        gamePaddle.setWidth(80);
+        setup(12);
+    }
+
+    public void startHard(){
+        gamePaddle.setWidth(50);
+        setup(7);
     }
 
 
