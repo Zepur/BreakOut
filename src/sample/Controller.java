@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -46,32 +48,29 @@ public class Controller {
     Button hard;
 //    private static int luck = 0;
     Timeline loop;
-    public static double speedX;
-    public static double speedY;
+    private static long startTime, stopTime;
+    public static double speedX, speedY;
     private static int scoreInt = 0;
-    private static ArrayList<Rectangle> rects = new ArrayList<Rectangle>();
+    private static ArrayList<Rectangle> rectangleArrayList = new ArrayList<Rectangle>();
 
     public void movePad(MouseEvent e) {
-        double boundsRight = (810 - gamePaddle.getWidth());
-        score.setText(String.valueOf(scoreInt));
-        gamePaddle.setX(e.getX()-(gamePaddle.getWidth()/2));
-        if (gamePaddle.getX() >= boundsRight)
-            gamePaddle.setX(boundsRight - 1);
-        if (gamePaddle.getX() <= 0)
-            gamePaddle.setX(1);
+        boolean paddleLeft = (gamePaddle.getX() + gamePaddle.getWidth()) >= gameWindow.getWidth();
+        boolean paddleRight = gamePaddle.getX() <= 0;
+        if(!paddleLeft || !paddleRight)
+            gamePaddle.setX(e.getX() - (gamePaddle.getWidth() / 2));
     }
 
     public static void setupBall(int diff) {
-        speedX = 1;
+        speedX = 1.6;
         switch (diff) {
             case 1:
-                speedY = 1;
+                speedY = 1.4;
                 break;
             case 2:
-                speedY = 1;
+                speedY = 1.4;
                 break;
             default:
-                speedY = 1;
+                speedY = 1.4;
         }
     }
 
@@ -86,6 +85,7 @@ public class Controller {
 
             @Override
             public void handle(final ActionEvent t) {
+                scoreLabel.setText(String.valueOf((System.currentTimeMillis()/1000)-startTime));
                 playerCircle.setLayoutX(playerCircle.getLayoutX() + speedX);
                 playerCircle.setLayoutY(playerCircle.getLayoutY() - speedY);
 
@@ -110,39 +110,48 @@ public class Controller {
                 if (atBottomBorder) {
                     gameOver();
                 }
+                if(rectangleArrayList.size()==0)
+                    victory();
                 try {
-                    for (Rectangle testRect : rects) {
+                    for (Rectangle testRect : rectangleArrayList) {
 
+
+                        boolean testolini = playerCircle.intersects(testRect.getX(), testRect.getY(), testRect.getWidth()+10, testRect.getHeight()+10);
                         boolean xx = ((playerCircle.getLayoutX() > (testRect.getLayoutX() - playerCircle.getRadius())) && (playerCircle.getLayoutX() < (testRect.getLayoutX() + testRect.getWidth() + playerCircle.getRadius())));
                         boolean yy = ((playerCircle.getLayoutY() < testRect.getLayoutY() + playerCircle.getRadius() + testRect.getHeight()) && (playerCircle.getLayoutY() > testRect.getLayoutY() - playerCircle.getRadius()));
-                        boolean left = (playerCircle.getLayoutX() - (testRect.getLayoutX() + playerCircle.getRadius())) == 0.5;
+                        boolean left = (playerCircle.getLayoutX() - (testRect.getLayoutX() - playerCircle.getRadius())) == 0.5;
                         boolean right = ((testRect.getLayoutX() + testRect.getWidth() + playerCircle.getRadius()) - playerCircle.getLayoutX()) == 0.5;
-                        boolean bottom = playerCircle.getLayoutY() == testRect.getLayoutY() + testRect.getHeight() + playerCircle.getRadius();
-                        boolean top = playerCircle.getLayoutY() == (testRect.getLayoutY() - playerCircle.getRadius());
-
+                        boolean bottom = (((playerCircle.getLayoutY() - (testRect.getLayoutY() + testRect.getHeight() + playerCircle.getRadius())) <= 2) && ((playerCircle.getLayoutY() - (testRect.getLayoutY() + testRect.getHeight() + playerCircle.getRadius())) >= -2));
+                        boolean top = (((playerCircle.getLayoutY() - (testRect.getLayoutY() + playerCircle.getRadius())) <= 2 ) && ((playerCircle.getLayoutY() - (testRect.getLayoutY() + playerCircle.getRadius())) >= -2 ));
+                        System.out.println(testolini);
                         if ((right || left) && yy) {
-                            rects.remove(testRect);
+                            rectangleArrayList.remove(testRect);
                             gameWindow.getChildren().remove(testRect);
                             speedX = -speedX;
 //                                Random rand = new Random();
 //                                luck = rand.nextInt(10);
                         }
                         if (xx && (top || bottom)) {
-                            rects.remove(testRect);
+                            rectangleArrayList.remove(testRect);
                             gameWindow.getChildren().remove(testRect);
                             speedY = -speedY;
 //                                Random rand = new Random();
 //                                luck = rand.nextInt(10);
                         }
+
                     }
 //                    luckyYou(luck);
 //                    luck = 0;
                 } catch (ConcurrentModificationException e) {
-                    //e.printStackTrace();
+//                    e.printStackTrace();
                 }
 
             }
         }));
+    }
+
+    private void victory() {
+        clickToPlayLabel.setText("VICTORY!!!");
     }
 
 //    private void luckyYou(int luck) {
@@ -167,64 +176,71 @@ public class Controller {
         lightEffect.setLight(light);
         lightEffect.setSurfaceScale(3.4f);
 
-        int hgap = 2, vgap = 2, brickWidth = 38, brickHeight = 20;
+        int hgap = 2, vgap = 2, brickWidth = 38, brickHeight = 20, numberOfRows = 15, numberOfColumns = 10;
         double snax = (gameWindow.getWidth()-(581))/2;
 
-        for(int row = 0; row < 15; row++){
-            for(int column = 0; column < 10; column++){
+        for(int row = 0; row < numberOfRows; row++){
+            for(int column = 0; column < numberOfColumns; column++){
                 switch (column){
                     case 0:
                     case 5:
                         Rectangle brickDODGERBLUE = new Rectangle(brickWidth, brickHeight, Color.DODGERBLUE);
                         brickDODGERBLUE.setLayoutX(snax+(row*brickDODGERBLUE.getWidth())+(hgap*row));
                         brickDODGERBLUE.setLayoutY(brickWidth +(column * brickDODGERBLUE.getHeight())+ (vgap*column));
-                        rects.add(brickDODGERBLUE);
+                        rectangleArrayList.add(brickDODGERBLUE);
                         break;
                     case 1:
                     case 6:
                         Rectangle brickLAWNGREEN = new Rectangle(brickWidth, brickHeight, Color.LAWNGREEN);
                         brickLAWNGREEN.setLayoutX(snax+(row*brickLAWNGREEN.getWidth())+(hgap*row));
                         brickLAWNGREEN.setLayoutY(brickWidth +(column * brickLAWNGREEN.getHeight())+ (vgap*column));
-                        rects.add(brickLAWNGREEN);
+                        rectangleArrayList.add(brickLAWNGREEN);
                         break;
                     case 2:
                     case 7:
                         Rectangle brickORANGE = new Rectangle(brickWidth, brickHeight, Color.ORANGE);
                         brickORANGE.setLayoutX(snax+(row*brickORANGE.getWidth())+(hgap*row));
                         brickORANGE.setLayoutY(brickWidth +(column * brickORANGE.getHeight())+ (vgap*column));
-                        rects.add(brickORANGE);
+                        rectangleArrayList.add(brickORANGE);
                         break;
                     case 3:
                     case 8:
                         Rectangle brickINDIANRED = new Rectangle(brickWidth, brickHeight, Color.INDIANRED);
                         brickINDIANRED.setLayoutX(snax+(row*brickINDIANRED.getWidth())+(hgap*row));
                         brickINDIANRED.setLayoutY(brickWidth +(column * brickINDIANRED.getHeight())+ (vgap*column));
-                        rects.add(brickINDIANRED);
+                        rectangleArrayList.add(brickINDIANRED);
                         break;
                     case 4:
                     case 9:
                         Rectangle brickFUCHSIA = new Rectangle(brickWidth, brickHeight, Color.FUCHSIA);
                         brickFUCHSIA.setLayoutX(snax+(row*brickFUCHSIA.getWidth())+(hgap*row));
                         brickFUCHSIA.setLayoutY(brickWidth +(column * brickFUCHSIA.getHeight())+ (vgap*column));
-                        rects.add(brickFUCHSIA);
+                        rectangleArrayList.add(brickFUCHSIA);
                         break;
                 }
             }
         }
 
-        for(Rectangle rect : rects){
+        for(Rectangle rect : rectangleArrayList){
             rect.setEffect(lightEffect);
             gameWindow.getChildren().add(rect);
         }
     }
 
     private void gameOver(){
+        stopTime = System.currentTimeMillis() / 1000;
         playerCircle.setVisible(false);
         loop.stop();
         clickToPlayLabel.setText("GAME OVER!");
     }
 
     public void setup(int num){
+        Image image = new Image("file:background1.png");
+        ImageView img = new ImageView();
+        img.setImage(image);
+        img.setFitHeight(461);
+        img.setFitWidth(500);
+        gameWindow.getChildren().add(img);
         gameWindow.setStyle("-fx-background-color: cornsilk;");
         gameWindow.setCursor(Cursor.NONE);
         clickToPlayLabel.setText("");
@@ -234,6 +250,7 @@ public class Controller {
         int diff = 1;
         setupBall(diff);
         playBall(num);
+        startTime = System.currentTimeMillis() / 1000;
     }
 
     public void startEasy(){
