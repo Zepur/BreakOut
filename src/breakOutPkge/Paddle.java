@@ -10,13 +10,11 @@ public class Paddle extends Rectangle {
         super(0, 450, width, height);
         setFill(Color.HOTPINK);
 
-        gameWindow.setOnMouseMoved(e -> {
-            setX((e.getX() - 50));
-        });
+        if(!Controller.isPlaying)
+            gameWindow.setOnMouseMoved(e -> setX((e.getX() - 50)));
     }
 
     public boolean collides(Ball ball) {
-        return ball.intersects(getX(), getY(), getWidth(), getHeight()) && isVisible();
-
+        return ball.intersects(getX(), getY(), getWidth(), getHeight());
     }
 }

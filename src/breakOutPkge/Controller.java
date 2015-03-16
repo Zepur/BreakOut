@@ -15,15 +15,16 @@ public class Controller {
     ImageView imgView = new ImageView();
     Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
     Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
-    static public Boolean isMuted = true;
+    public static boolean isPlaying = false;
+    static public boolean isMuted = false;
     @FXML
     static AnchorPane playWindow;
     @FXML
     Pane gameWindow;
     @FXML
-    Label gameName;
-    @FXML
     static Label scoreLabel;
+    @FXML
+    Label gameName;
     @FXML
     Label score;
     @FXML
@@ -37,7 +38,7 @@ public class Controller {
 
     protected static long startTime;
 
-    public void setup(int width, int height){
+    public void setup(int width, int height, boolean isHard){
         gameWindow.setCursor(Cursor.CROSSHAIR);
         gamePaddle = new Paddle(gameWindow, width, height);
         gameWindow.getChildren().add(gamePaddle);
@@ -48,20 +49,44 @@ public class Controller {
         imgView.setX(380);
         imgView.setY(545);
         gameWindow.getChildren().add(imgView);
-        double hVelocity = getSpeedParseIsH(true);
-        double vVelocity = getSpeedParseIsH(false);
+        double hVelocity = getSpeedParseIsH(true, isHard);
+        double vVelocity = getSpeedParseIsH(false, isHard);
         ball = new Ball(gameWindow, (gameWindow.getWidth()/2), (gamePaddle.getY()-20), hVelocity, vVelocity, gamePaddle);
         gameWindow.getChildren().add(ball);
         getBricks(15, 10);
+        get20percent();
+        addBricksToWindow();
+        isPlaying = true;
         startTime = System.currentTimeMillis() / 1000;
+    }
+
+    private void addBricksToWindow() {
+        for(Brick brick : Brick.bricks){
+            gameWindow.getChildren().add(brick);
+        }
     }
 
     private void getBricks(int numRows, int numCols) {
         for (int row = 0; row < numRows; row++) {
             for (int column = 0; column < numCols; column++) {
-                gameWindow.getChildren().add(new Brick(gameWindow, row, column));
+                new Brick(gameWindow, row, column, 1, 15, 10);
             }
         }
+    }
+
+    private void get20percent(){
+        decrease(120, Brick.bricks.size());
+    }
+
+    private void decrease(int target, int lvl) {
+        Random rand = new Random();
+        int brickNum = rand.nextInt(Brick.bricks.size());
+        Brick.bricks.remove(brickNum);
+        if(target == lvl)
+            return;
+        int lvl2 = (lvl-1);
+        decrease(target, lvl2);
+
     }
 
     public void muteUnmute(){
@@ -69,22 +94,24 @@ public class Controller {
         isMuted = !isMuted;
     }
 
-    private double getSpeedParseIsH(Boolean isH){
-        Random rand = new Random();
-        int randomDirection = rand.nextInt(10)+2;
-        Boolean leftOrRight = randomDirection%2 != 0;
-        int speed = (rand.nextInt(10) + 10);
-        double vVelocity = (double)speed/10;
-        double hVelTemp = (double)speed/10;
+    private double getSpeedParseIsH(boolean isH, boolean isHard){
+        Random randX = new Random();
+        Random randY = new Random();
+        int randomDirection = randX.nextInt(10)+2;
+        boolean leftOrRight = randomDirection%2 != 0;
+        int speedXX = isHard ? (randX.nextInt(4) + 16) : (randX.nextInt(4) + 10);
+        int speedYY = isHard ? (randY.nextInt(4) + 16) : (randY.nextInt(4) + 10);
+        double vVelocity = (double)speedYY/10;
+        double hVelTemp = (double)speedXX/10;
         double hVelocity = leftOrRight ? hVelTemp : -hVelTemp;
         return isH ? hVelocity : vVelocity;
     }
 
     public void startEasy(){
-        setup(80, 20);
+        setup(80, 20, false);
     }
     public void startHard(){
-        setup(50, 20);
+        setup(70, 20, true);
     }
 
 }
