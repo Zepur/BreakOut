@@ -112,8 +112,7 @@ public class Ball extends Circle {
                     speedY = -speedY;
                 }
                 if (atBottomBorder) {
-                    noiceMaker(boundS);
-                    Controller.isPlaying = false;
+                    Controller.betweenLVLs(gameWindow);
                 }
             }
         }

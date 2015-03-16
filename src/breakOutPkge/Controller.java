@@ -8,15 +8,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.Random;
 
 public class Controller {
-    ImageView imgView = new ImageView();
+    Pane level1 = new Pane();
+    Pane level2 = new Pane();
+    Pane level3 = new Pane();
+    public static int levelNumber = 1;
+    ImageView muteImgView = new ImageView();
     Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
     Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
     public static boolean isPlaying = false;
-    static public boolean isMuted = false;
+    static public boolean isMuted = true;
     @FXML
     static AnchorPane playWindow;
     @FXML
@@ -46,21 +51,21 @@ public class Controller {
         easy.setVisible(false);
         hard.setVisible(false);
         muteUnmute();
-        imgView.setX(380);
-        imgView.setY(545);
-        gameWindow.getChildren().add(imgView);
+        muteImgView.setX(380);
+        muteImgView.setY(545);
+        gameWindow.getChildren().add(muteImgView);
         double hVelocity = getSpeedParseIsH(true, isHard);
         double vVelocity = getSpeedParseIsH(false, isHard);
         ball = new Ball(gameWindow, (gameWindow.getWidth()/2), (gamePaddle.getY()-20), hVelocity, vVelocity, gamePaddle);
         gameWindow.getChildren().add(ball);
-        getBricks(15, 10);
-        get20percent();
-        addBricksToWindow();
+        addBricks();
         isPlaying = true;
         startTime = System.currentTimeMillis() / 1000;
     }
 
-    private void addBricksToWindow() {
+    private void addBricks() {
+        getBricks(15, 10);
+        get20percent();
         for(Brick brick : Brick.bricks){
             gameWindow.getChildren().add(brick);
         }
@@ -69,11 +74,10 @@ public class Controller {
     private void getBricks(int numRows, int numCols) {
         for (int row = 0; row < numRows; row++) {
             for (int column = 0; column < numCols; column++) {
-                new Brick(gameWindow, row, column, 1, 15, 10);
+                new Brick(gameWindow, row, column, Controller.levelNumber, 15, 10);
             }
         }
     }
-
     private void get20percent(){
         decrease(120, Brick.bricks.size());
     }
@@ -90,7 +94,7 @@ public class Controller {
     }
 
     public void muteUnmute(){
-        imgView.setImage(isMuted? unmuted : muted);
+        muteImgView.setImage(isMuted ? unmuted : muted);
         isMuted = !isMuted;
     }
 
@@ -112,6 +116,20 @@ public class Controller {
     }
     public void startHard(){
         setup(70, 20, true);
+    }
+
+    public static void betweenLVLs(Pane gameWindow) {
+        Label betweenLabel = new Label("YOU LOST AT lvl: "+levelNumber+"!\nNOOB");
+        betweenLabel.setLayoutX(150);
+        betweenLabel.setLayoutY(240);
+        betweenLabel.setTextFill(Color.RED);
+        betweenLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 40;");
+        Button nextLVLbutton = new Button("PLEB");
+        nextLVLbutton.setLayoutX((gameWindow.getWidth()/2)-(nextLVLbutton.getWidth())/2);
+        nextLVLbutton.setLayoutY(400);
+        nextLVLbutton.setStyle("-fx-background-color: green; -fx-color: blue;");
+        gameWindow.getChildren().add(betweenLabel);
+        gameWindow.getChildren().add(nextLVLbutton);
     }
 
 }
