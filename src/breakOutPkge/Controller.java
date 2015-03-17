@@ -18,10 +18,9 @@ import java.util.Random;
 public class Controller {
     static Label bigLabel = new Label();
     static Button bigButton = new Button();
-    Pane level1 = new Pane();
-    Pane level2 = new Pane();
-    Pane level3 = new Pane();
+    static Label score = new Label();
     public static int levelNumber = 1;
+    public static int lives = 3;
     public static double hVelocity;
     public static double vVelocity;
     ImageView muteImgView = new ImageView();
@@ -38,8 +37,6 @@ public class Controller {
     @FXML
     Label gameName;
     @FXML
-    Label score;
-    @FXML
     Label clickToPlayLabel;
     @FXML
     Button easy;
@@ -51,12 +48,18 @@ public class Controller {
     protected static long startTime;
 
     public void setup(int width, int height, boolean isHard){
+        score.setText(String.valueOf(lives));
+        score.setTextFill(Color.WHITE);
+        score.setLayoutX(85);
+        score.setLayoutY(547);
+        score.setStyle("-fx-font-weight: bold; -fx-font-size: 20;");
+
         bigLabel.setLayoutX(150);
         bigLabel.setLayoutY(240);
         bigLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 40;");
 
         bigButton.setLayoutX((gameWindow.getWidth() / 2) - (70));
-        bigButton.setLayoutY(360);
+        bigButton.setLayoutY(60);
         bigButton.setMinWidth(140);
         bigButton.setMinHeight(70);
         bigButton.setTextFill(Color.WHITE);
@@ -72,7 +75,10 @@ public class Controller {
         double hVelocity = getSpeedParseIsH(true, isHard);
         double vVelocity = getSpeedParseIsH(false, isHard);
         ball = new Ball(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle);
+        ball.setCenterY(380);
+        ball.setCenterX(200);
 
+        gameWindow.getChildren().add(score);
         gameWindow.getChildren().add(gamePaddle);
         gameWindow.getChildren().add(muteImgView);
         gameWindow.getChildren().add(ball);
@@ -82,8 +88,8 @@ public class Controller {
     }
 
     private static void addBricks(Pane gameWindow) {
-        gameWindow.getChildren().removeAll(bigLabel);
-        gameWindow.getChildren().removeAll(bigButton);
+        gameWindow.getChildren().remove(bigLabel);
+        gameWindow.getChildren().remove(bigButton);
         getBricks(gameWindow, 15, 10);
         get20percent();
         for(Brick brick : Brick.bricks){
@@ -99,6 +105,7 @@ public class Controller {
             }
         }
     }
+
     private static void get20percent(){
         decrease(120, Brick.bricks.size());
     }
@@ -156,7 +163,7 @@ public class Controller {
     public static void betweenLVLs(Pane gameWindow) {
         bigLabel.setText("You beat lvl: " + levelNumber + "!\nYaay");
         bigLabel.setTextFill(Color.GREENYELLOW);
-        bigButton.setText("Start lvl: "+levelNumber+1);
+        bigButton.setText("Start lvl: "+(levelNumber+1));
         bigButton.setStyle("-fx-background-color: blue;");
         bigButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -177,12 +184,9 @@ public class Controller {
         bigButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                gameWindow.getChildren().removeAll(ball);
                 gameWindow.getChildren().removeAll(Brick.bricks);
                 Brick.bricks = new ArrayList<>();
                 levelNumber = 1;
-                ball.setLayoutX(400);
-                ball.setLayoutY(380);
                 startLVL(gameWindow);
             }
         });

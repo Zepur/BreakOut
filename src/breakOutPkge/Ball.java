@@ -23,9 +23,7 @@ public class Ball extends Circle {
         this.xPos = startX;
         this.yPos = startY;
         this.speedX = speedX;
-        this.speedY = 1.9;
-//        Stop[] stops = {new Stop(0, Color.WHITE), new Stop(0.3, Color.PALEGOLDENROD), new Stop(0.5, Color.ORANGE), new Stop(1, Color.RED)};
-//        RadialGradient gradient = new RadialGradient(0, 0, 0, 0, 6, false, CycleMethod.NO_CYCLE, stops);
+        this.speedY = speedY;
         this.setFill(Color.ORANGE);
 
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(60),
@@ -37,10 +35,8 @@ public class Ball extends Circle {
 
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
         if(Controller.isPlaying){
-            xPos += speedX;
-            yPos += -speedY;
-            setCenterX(xPos);
-            setCenterY(yPos);
+            setCenterX(getCenterX() + speedX);
+            setCenterY(getCenterY()-speedY);
             double ballPosLEFT = (getCenterX() - getRadius());
             double ballPosRIGHT = (getCenterX() + getRadius());
             double ballPosTOP = (getCenterY() - getRadius());
@@ -114,8 +110,17 @@ public class Ball extends Circle {
                     speedY = -speedY;
                 }
                 if (atBottomBorder) {
-                    Controller.isPlaying = false;
-                    Controller.endGame(gameWindow);
+                    if(Controller.lives>1) {
+                        setCenterY(13);
+                        speedY = 1;
+                        Controller.lives--;
+                        Controller.score.setText(String.valueOf(Controller.lives));
+                    } else {
+                        Controller.lives--;
+                        Controller.score.setText(String.valueOf(Controller.lives));
+                        Controller.isPlaying = false;
+                        Controller.endGame(gameWindow);
+                    }
                 }
             }
         }
