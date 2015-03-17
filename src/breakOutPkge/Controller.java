@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -19,15 +20,16 @@ public class Controller {
     static Label bigLabel = new Label();
     static Button bigButton = new Button();
     static Label score = new Label();
+    public static MediaPlayer jukeBox;
     public static int levelNumber = 1;
     public static int lives = 3;
     public static double hVelocity;
     public static double vVelocity;
-    ImageView muteImgView = new ImageView();
-    Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
-    Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
+    public static Button muteButton = new Button();
+    static Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
+    static Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
     public static boolean isPlaying = false;
-    static public boolean isMuted = true;
+    static public boolean isMuted = false;
     @FXML
     static AnchorPane playWindow;
     @FXML
@@ -48,18 +50,21 @@ public class Controller {
     protected static long startTime;
 
     public void setup(int width, int height, boolean isHard){
+        muteButton.setMinWidth(60);
+        muteButton.setMinHeight(60);
+        muteButton.setStyle("-fx-background-color: green; -fx-border: none;");
         score.setText(String.valueOf(lives));
         score.setTextFill(Color.WHITE);
-        score.setLayoutX(85);
+        score.setLayoutX(155);
         score.setLayoutY(547);
         score.setStyle("-fx-font-weight: bold; -fx-font-size: 20;");
 
-        bigLabel.setLayoutX(150);
+        bigLabel.setLayoutX(250);
         bigLabel.setLayoutY(240);
         bigLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 40;");
 
         bigButton.setLayoutX((gameWindow.getWidth() / 2) - (70));
-        bigButton.setLayoutY(60);
+        bigButton.setLayoutY(360);
         bigButton.setMinWidth(140);
         bigButton.setMinHeight(70);
         bigButton.setTextFill(Color.WHITE);
@@ -69,9 +74,8 @@ public class Controller {
         clickToPlayLabel.setText(null);
         easy.setVisible(false);
         hard.setVisible(false);
-        muteUnmute();
-        muteImgView.setX(380);
-        muteImgView.setY(545);
+        muteButton.setLayoutX(380);
+        muteButton.setLayoutY(545);
         double hVelocity = getSpeedParseIsH(true, isHard);
         double vVelocity = getSpeedParseIsH(false, isHard);
         ball = new Ball(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle);
@@ -80,7 +84,7 @@ public class Controller {
 
         gameWindow.getChildren().add(score);
         gameWindow.getChildren().add(gamePaddle);
-        gameWindow.getChildren().add(muteImgView);
+        gameWindow.getChildren().add(muteButton);
         gameWindow.getChildren().add(ball);
         gameWindow.getChildren().add(bigLabel);
         gameWindow.getChildren().add(bigButton);
@@ -121,9 +125,9 @@ public class Controller {
 
     }
 
-    public void muteUnmute(){
-        muteImgView.setImage(isMuted ? unmuted : muted);
+    public static void muteUnmute(){
         isMuted = !isMuted;
+        muteButton.setStyle("-fx-background-color:" + (isMuted ? "red" : "green") + ";");
     }
 
     private double getSpeedParseIsH(boolean isH, boolean isHard){
@@ -165,6 +169,7 @@ public class Controller {
         bigLabel.setTextFill(Color.GREENYELLOW);
         bigButton.setText("Start lvl: "+(levelNumber+1));
         bigButton.setStyle("-fx-background-color: blue;");
+        gameWindow.getChildren().removeAll(Brick.bricks);
         bigButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -177,16 +182,18 @@ public class Controller {
     }
 
     public static void endGame(Pane gameWindow){
-        bigLabel.setText("YOU LOST AT lvl: " + levelNumber + "!\nNOOB");
+        bigLabel.setText("YOU LOST AT lvl: " + levelNumber + "!\nbooboo");
         bigLabel.setTextFill(Color.RED);
         bigButton.setStyle("-fx-background-color: blue;");
         bigButton.setText("Retry");
+        gameWindow.getChildren().removeAll(Brick.bricks);
         bigButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                gameWindow.getChildren().removeAll(Brick.bricks);
                 Brick.bricks = new ArrayList<>();
                 levelNumber = 1;
+                lives=3;
+                score.setText(String.valueOf(lives));
                 startLVL(gameWindow);
             }
         });

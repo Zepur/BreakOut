@@ -2,6 +2,8 @@ package breakOutPkge;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -15,7 +17,7 @@ public class Ball extends Circle {
     public Media boundS = new Media(getClass().getResource("plink.mp3").toString());
     public Media padS = new Media(getClass().getResource("plinklo.mp3").toString());
     public Media smashS = new Media(getClass().getResource("smash.mp3").toString());
-    double xPos, yPos, speedY, speedX;
+    double xPos, yPos, speedY, speedX, initialSpeedY;
     static double radius = 8;
 
     public Ball(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
@@ -24,6 +26,7 @@ public class Ball extends Circle {
         this.yPos = startY;
         this.speedX = speedX;
         this.speedY = speedY;
+        this.initialSpeedY = speedY;
         this.setFill(Color.ORANGE);
 
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(60),
@@ -34,6 +37,14 @@ public class Ball extends Circle {
     }
 
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
+
+        Controller.muteButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Controller.muteUnmute();
+            }
+        });
+
         if(Controller.isPlaying){
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY()-speedY);
@@ -42,6 +53,9 @@ public class Ball extends Circle {
             double ballPosTOP = (getCenterY() - getRadius());
             double ballPosDOWN = (getCenterY() + getRadius());
             if(Brick.bricks.size()==0) {
+                setCenterX(400-getRadius());
+                setCenterY(380);
+                speedY = initialSpeedY;
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
@@ -116,6 +130,9 @@ public class Ball extends Circle {
                         Controller.lives--;
                         Controller.score.setText(String.valueOf(Controller.lives));
                     } else {
+                        setCenterY(380);
+                        setCenterX(400 - getRadius());
+                        speedY = -speedY;
                         Controller.lives--;
                         Controller.score.setText(String.valueOf(Controller.lives));
                         Controller.isPlaying = false;
@@ -128,9 +145,9 @@ public class Ball extends Circle {
 
     public static void noiceMaker(Media sound) {
         if (sound != null){
-            MediaPlayer playSound = new MediaPlayer(sound);
-            playSound.setVolume(Controller.isMuted? 0 : 70);
-            playSound.play();
+            Controller.jukeBox = new MediaPlayer(sound);
+            Controller.jukeBox.setVolume((Controller.isMuted ? 0 : 100));
+            Controller.jukeBox.play();
         }
     }
 
