@@ -1,35 +1,21 @@
 package breakOutPkge;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Controller {
-    static Label bigLabel = new Label();
-    static Button bigButton = new Button();
-    static Label score = new Label();
-    public static MediaPlayer jukeBox;
-    public static int levelNumber = 1;
-    public static int lives = 3;
-    public static double hVelocity;
-    public static double vVelocity;
-    public static Button muteButton = new Button();
-    static Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
-    static Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
-    public static boolean isPlaying = false;
-    static public boolean isMuted = false;
     @FXML
     static AnchorPane playWindow;
     @FXML
@@ -44,15 +30,42 @@ public class Controller {
     Button easy;
     @FXML
     Button hard;
+    static Label bigLabel = new Label();
+    static Button bigButton = new Button();
+    static Label score = new Label();
+    static Label bricksLeftInfoLabel = new Label("Bricks left:");
+    static Label bricksLeftLabel = new Label();
+    public static MediaPlayer jukeBox;
+    public static int levelNumber = 1;
+    public static int lives = 3;
+    public static int bricksLeft;
+    public static double hVelocity, vVelocity;
+    public static Rectangle muteButton = new Rectangle();
+    static Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
+    static Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
+    static ImagePattern unmutedIMG = new ImagePattern(unmuted);
+    static ImagePattern mutedIMG = new ImagePattern(muted);
+    public static boolean isPlaying = false;
+    static public boolean isMuted = false;
     static Ball ball;
     static Paddle gamePaddle;
-
     protected static long startTime;
 
     public void setup(int width, int height, boolean isHard){
-        muteButton.setMinWidth(60);
-        muteButton.setMinHeight(60);
-        muteButton.setStyle("-fx-background-color: green; -fx-border: none;");
+        bricksLeftInfoLabel.setLayoutX(35);
+        bricksLeftInfoLabel.setLayoutY(580);
+        bricksLeftInfoLabel.setTextFill(Color.GRAY);
+        bricksLeftInfoLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+
+        bricksLeftLabel.setLayoutX(130);
+        bricksLeftLabel.setLayoutY(580);
+        bricksLeftLabel.setTextFill(Color.WHITE);
+        bricksLeftLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+
+        muteButton.setWidth(30);
+        muteButton.setHeight(30);
+        muteButton.setFill(unmutedIMG);
+
         score.setText(String.valueOf(lives));
         score.setTextFill(Color.WHITE);
         score.setLayoutX(155);
@@ -82,6 +95,8 @@ public class Controller {
         ball.setCenterY(380);
         ball.setCenterX(200);
 
+        gameWindow.getChildren().add(bricksLeftInfoLabel);
+        gameWindow.getChildren().add(bricksLeftLabel);
         gameWindow.getChildren().add(score);
         gameWindow.getChildren().add(gamePaddle);
         gameWindow.getChildren().add(muteButton);
@@ -95,11 +110,12 @@ public class Controller {
         gameWindow.getChildren().remove(bigLabel);
         gameWindow.getChildren().remove(bigButton);
         getBricks(gameWindow, 15, 10);
-        get20percent();
+        get20percent((levelNumber==2 ? 135 : 120));
         for(Brick brick : Brick.bricks){
             gameWindow.getChildren().add(brick);
         }
         isPlaying = true;
+        System.out.println(Brick.bricks.size());
     }
 
     private static void getBricks(Pane gameWindow, int numRows, int numCols) {
@@ -110,24 +126,23 @@ public class Controller {
         }
     }
 
-    private static void get20percent(){
-        decrease(120, Brick.bricks.size());
+    private static void get20percent(int target){
+        decrease(target, Brick.bricks.size());
     }
 
     private static void decrease(int target, int lvl) {
         Random rand = new Random();
         int brickNum = rand.nextInt(Brick.bricks.size());
         Brick.bricks.remove(brickNum);
-        if(target == lvl)
+        if(target == (lvl-1))
             return;
         int lvl2 = (lvl-1);
         decrease(target, lvl2);
-
     }
 
     public static void muteUnmute(){
         isMuted = !isMuted;
-        muteButton.setStyle("-fx-background-color:" + (isMuted ? "red" : "green") + ";");
+        muteButton.setFill((isMuted ? mutedIMG : unmutedIMG));
     }
 
     private double getSpeedParseIsH(boolean isH, boolean isHard){
@@ -151,51 +166,37 @@ public class Controller {
     }
 
     public static void startLVL(Pane gameWindow) {
-        bigLabel.setText("Lets start!");
-        bigLabel.setTextFill(Color.FORESTGREEN);
         bigButton.setText("Start");
-        bigButton.setStyle("-fx-background-color: green;");
-        bigButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                startTime = System.currentTimeMillis() / 1000;
-                addBricks(gameWindow);
-            }
+        bigButton.setStyle("-fx-background-color: green; -fx-font-size: 30; -fx-font-weight:bold;");
+        bigButton.setOnAction(e -> {
+            startTime = System.currentTimeMillis() / 1000;
+            addBricks(gameWindow);
         });
     }
 
     public static void betweenLVLs(Pane gameWindow) {
-        bigLabel.setText("You beat lvl: " + levelNumber + "!\nYaay");
+        bigLabel.setText("You beat lvl: " + levelNumber + "!\n");
         bigLabel.setTextFill(Color.GREENYELLOW);
         bigButton.setText("Start lvl: "+(levelNumber+1));
-        bigButton.setStyle("-fx-background-color: blue;");
+        bigButton.setStyle("-fx-background-color: blue; -fx-font-size: 30; -fx-font-weight:bold;");
         gameWindow.getChildren().removeAll(Brick.bricks);
-        bigButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                levelNumber++;
-                addBricks(gameWindow);
-            }
-        });
+        bigButton.setOnAction(e -> { levelNumber++; addBricks(gameWindow); });
         gameWindow.getChildren().add(bigButton);
         gameWindow.getChildren().add(bigLabel);
     }
 
     public static void endGame(Pane gameWindow){
-        bigLabel.setText("YOU LOST AT lvl: " + levelNumber + "!\nbooboo");
+        bigLabel.setText("Game over @ lvl: " + levelNumber + "!");
         bigLabel.setTextFill(Color.RED);
-        bigButton.setStyle("-fx-background-color: blue;");
+        bigButton.setStyle("-fx-background-color: blue; -fx-font-size: 30; -fx-font-weight:bold;");
         bigButton.setText("Retry");
         gameWindow.getChildren().removeAll(Brick.bricks);
-        bigButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Brick.bricks = new ArrayList<>();
-                levelNumber = 1;
-                lives=3;
-                score.setText(String.valueOf(lives));
-                startLVL(gameWindow);
-            }
+        bigButton.setOnAction(e -> {
+            Brick.bricks = new ArrayList<>();
+            levelNumber = 1;
+            lives=3;
+            score.setText(String.valueOf(lives));
+            startLVL(gameWindow);
         });
         gameWindow.getChildren().add(bigButton);
         gameWindow.getChildren().add(bigLabel);

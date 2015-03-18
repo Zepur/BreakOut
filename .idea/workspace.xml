@@ -2,17 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/breakOutPkge/tesst.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Ball.class" afterPath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Ball.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller$1.class" afterPath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller$2.class" afterPath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller$3.class" afterPath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller.class" afterPath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Controller.class" />
+      <change type="DELETED" beforePath="C:\Users\Zepur\BreakOut\out\production\BreakOut\breakOutPkge\Controller$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Zepur\BreakOut\out\production\BreakOut\breakOutPkge\Controller$2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Zepur\BreakOut\out\production\BreakOut\breakOutPkge\Controller$3.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="C:\Users\Zepur\BreakOut\out\production\BreakOut\breakOutPkge\Controller.class" afterPath="C:\Users\Zepur\BreakOut\out\production\BreakOut\breakOutPkge\Controller.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Paddle.class" afterPath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/Paddle.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/breakOutPkge/Ball.java" afterPath="$PROJECT_DIR$/src/breakOutPkge/Ball.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/breakOutPkge/Controller.java" afterPath="$PROJECT_DIR$/src/breakOutPkge/Controller.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/breakOutPkge/Paddle.java" afterPath="$PROJECT_DIR$/src/breakOutPkge/Paddle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/sample.fxml" afterPath="$PROJECT_DIR$/out/production/BreakOut/breakOutPkge/sample.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/breakOutPkge/sample.fxml" afterPath="$PROJECT_DIR$/src/breakOutPkge/sample.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -77,28 +74,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/breakOutPkge/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5387931" vertical-offset="2598" max-vertical-offset="3264">
-              <caret line="184" column="71" selection-start-line="184" selection-start-column="71" selection-end-line="184" selection-end-column="71" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2427" max-vertical-offset="3298">
+              <caret line="202" column="5" selection-start-line="202" selection-start-column="5" selection-end-line="202" selection-end-column="5" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#4646#4647#0" expanded="true" />
+                <element signature="e#4699#4700#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Ball.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Ball.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/breakOutPkge/Ball.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="752" max-vertical-offset="2560">
-              <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1600#1601#0" expanded="true" />
-                <element signature="e#1655#1656#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.68662953" vertical-offset="493" max-vertical-offset="2465">
+              <caret line="67" column="49" selection-start-line="67" selection-start-column="49" selection-end-line="67" selection-end-column="49" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -106,8 +100,8 @@
       <file leaf-file-name="Paddle.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/breakOutPkge/Paddle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="448">
-              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="425">
+              <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -147,8 +141,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1552" />
-    <option name="height" value="842" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -225,28 +219,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="breakOutPkge" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BreakOut" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BreakOut" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="breakOutPkge" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="d00" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -581,7 +553,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1552" height="842" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -594,10 +566,10 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30410182" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18021978" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21538462" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.114583336" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.114072494" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -671,7 +643,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="544" max-vertical-offset="1377">
           <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -680,11 +653,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2108">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1600#1601#0" expanded="true" />
-            <element signature="e#1655#1656#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -738,7 +707,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4352">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -773,7 +743,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="2740" max-vertical-offset="4012">
           <caret line="168" column="0" selection-start-line="168" selection-start-column="0" selection-end-line="168" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -801,7 +772,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4012">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -829,7 +801,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2992">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -864,7 +837,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4233">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -899,7 +873,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3247">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -934,7 +909,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2091">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -969,7 +945,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="1600" max-vertical-offset="1968">
           <caret line="100" column="13" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="13" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1004,7 +981,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="170">
           <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1059,7 +1037,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="400">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1067,14 +1044,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.10714286" vertical-offset="0" max-vertical-offset="448">
           <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/breakOutPkge/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2427" max-vertical-offset="3298">
+          <caret line="202" column="5" selection-start-line="202" selection-start-column="5" selection-end-line="202" selection-end-column="5" />
+          <folding>
+            <element signature="e#4646#4647#0" expanded="true" />
+            <element signature="e#4699#4700#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/breakOutPkge/Paddle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="448">
-          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="425">
+          <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1083,23 +1070,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/breakOutPkge/Ball.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="752" max-vertical-offset="2560">
-          <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1600#1601#0" expanded="true" />
-            <element signature="e#1655#1656#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/breakOutPkge/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5387931" vertical-offset="2598" max-vertical-offset="3264">
-          <caret line="184" column="71" selection-start-line="184" selection-start-column="71" selection-end-line="184" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.68662953" vertical-offset="493" max-vertical-offset="2465">
+          <caret line="67" column="49" selection-start-line="67" selection-start-column="49" selection-end-line="67" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>
