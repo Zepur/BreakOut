@@ -1,5 +1,7 @@
 package breakOutPkge;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -11,6 +13,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -41,6 +44,7 @@ public class Controller {
     public static int bricksLeft;
     public static double hVelocity, vVelocity;
     public static Rectangle muteButton = new Rectangle();
+    public static Rectangle powerUPpadSize = new Rectangle(40, 40, Color.ALICEBLUE);
     static Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
     static Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
     static ImagePattern unmutedIMG = new ImagePattern(unmuted);
@@ -52,6 +56,16 @@ public class Controller {
     protected static long startTime;
 
     public void setup(int width, int height, boolean isHard){
+        powerUPpadSize.setArcWidth(20);
+        powerUPpadSize.setArcHeight(20);
+        powerUPpadSize.setX(30);
+        powerUPpadSize.setY(400);
+        powerUPpadSize.setRotate(45);
+        powerUPpadSize.setOnMousePressed(e -> {
+            gamePaddle.setWidth(100);
+            gameWindow.getChildren().removeAll(powerUPpadSize);
+        });
+
         bricksLeftInfoLabel.setLayoutX(35);
         bricksLeftInfoLabel.setLayoutY(580);
         bricksLeftInfoLabel.setTextFill(Color.GRAY);
@@ -89,9 +103,9 @@ public class Controller {
         hard.setVisible(false);
         muteButton.setLayoutX(380);
         muteButton.setLayoutY(545);
-        double hVelocity = getSpeedParseIsH(true, isHard);
-        double vVelocity = getSpeedParseIsH(false, isHard);
-        ball = new Ball(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle);
+        double hVelocity = getSpeed(true);
+        double vVelocity = getSpeed(false);
+        ball = new Ball(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle, (isHard ? 15 : 10));
         ball.setCenterY(380);
         ball.setCenterX(200);
 
@@ -110,12 +124,11 @@ public class Controller {
         gameWindow.getChildren().remove(bigLabel);
         gameWindow.getChildren().remove(bigButton);
         getBricks(gameWindow, 15, 10);
-        get20percent((levelNumber==2 ? 135 : 120));
+        get20percent((levelNumber==2 ? 135 : (levelNumber==3 ? 150 : 120)));
         for(Brick brick : Brick.bricks){
             gameWindow.getChildren().add(brick);
         }
         isPlaying = true;
-        System.out.println(Brick.bricks.size());
     }
 
     private static void getBricks(Pane gameWindow, int numRows, int numCols) {
@@ -124,10 +137,14 @@ public class Controller {
                 new Brick(gameWindow, row, column, Controller.levelNumber, 15, 10);
             }
         }
+        bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
     }
 
     private static void get20percent(int target){
-        decrease(target, Brick.bricks.size());
+        if(Brick.bricks.size() <= target)
+            return;
+        else
+            decrease(target, Brick.bricks.size());
     }
 
     private static void decrease(int target, int lvl) {
@@ -145,13 +162,28 @@ public class Controller {
         muteButton.setFill((isMuted ? mutedIMG : unmutedIMG));
     }
 
-    private double getSpeedParseIsH(boolean isH, boolean isHard){
+    public static void powerMeUp(int number, Pane gameWindow){
+        switch (number){
+            case 0:case 1:case 2:case 3:
+                gameWindow.getChildren().add(powerUPpadSize);
+
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1500), e ->
+                        gameWindow.getChildren().removeAll(powerUPpadSize)
+                ));
+                timeline.play();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private double getSpeed(boolean isH){
         Random randX = new Random();
         Random randY = new Random();
         int randomDirection = randX.nextInt(10)+2;
         boolean leftOrRight = randomDirection%2 != 0;
-        int speedXX = isHard ? (randX.nextInt(4) + 16) : (randX.nextInt(4) + 10);
-        int speedYY = isHard ? (randY.nextInt(4) + 16) : (randY.nextInt(4) + 10);
+        int speedXX = (randX.nextInt(4) + 10);
+        int speedYY = (randY.nextInt(4) + 10);
         vVelocity = (double)speedYY/10;
         double hVelTemp = (double)speedXX/10;
         hVelocity = leftOrRight ? hVelTemp : -hVelTemp;

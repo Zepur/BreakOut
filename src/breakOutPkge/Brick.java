@@ -9,8 +9,8 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class Brick extends Rectangle {
-    final static int BRICK_WIDTH = 40;
-    final static int BRICK_HEIGHT = 16;
+    final static int BRICK_WIDTH = 45;
+    final static int BRICK_HEIGHT = 18;
     int hGap = 3;
     int vGap = 3;
 
@@ -34,48 +34,64 @@ public class Brick extends Rectangle {
                         setFill(Color.HOTPINK);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                     case 1:case 9:
-                        setFill(Color.RED);
+                        setFill(Color.TOMATO);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                     case 2:case 10:
                         setFill(Color.ORANGE);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                     case 3:case 11:
                         setFill(Color.YELLOW);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                     case 4:case 12:
                         setFill(Color.GREEN);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                     case 5:case 13:
                         setFill(Color.BLUE);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                     case 6:case 14:
                         setFill(Color.INDIGO);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                     case 7:
                         setFill(Color.PURPLE);
                         setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                         setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                        setArcHeight(15);
+                        setArcWidth(15);
                         bricks.add(this);
                         break;
                 }
@@ -86,14 +102,40 @@ public class Brick extends Rectangle {
                         ((row == 4 || row == 10) && (column == 1 || column == 3 || column == 4 || column == 5 || column == 6 || column == 7 || column == 8)) ||
                         ((row == 5 || row == 9) && (column == 2 || column == 3 || column == 5 || column == 6)) ||
                         ((row == 6 || row == 7 || row == 8) && (column == 3 || column == 4 || column == 5 || column == 6))) {
-                    setFill(Color.DARKRED);
+                    setFill(Color.RED);
+                    setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
+                    setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                    setArcHeight(10);
+                    setArcWidth(10);
+                    bricks.add(this);
+                } else {
+                    setFill(Color.WHITE);
+                    setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
+                    setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                    setArcHeight(20);
+                    setArcWidth(20);
+                    bricks.add(this);
+                }
+                break;
+            case 3:
+                if (row == 6 || row == 7 || column == 4 || column == 5){
+                    setFill(Color.DARKBLUE);
                     setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                     setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
                     bricks.add(this);
-                } else {
-                    setFill(Color.DARKGRAY);
+                } else if((row == 5 && column != 4 && column != 5) || (row == 8 && column != 4 && column != 5) || (column == 3 && row != 6 && row != 7) || (column == 6 && row != 6 && row != 7)) {
+                    setFill(Color.WHITE);
                     setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                     setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                    setArcHeight(20);
+                    setArcWidth(20);
+                    bricks.add(this);
+                } else  {
+                    setFill(Color.RED);
+                    setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
+                    setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
+                    setArcHeight(10);
+                    setArcWidth(10);
                     bricks.add(this);
                 }
                 break;
@@ -104,8 +146,6 @@ public class Brick extends Rectangle {
             l.setLight(light);
             l.setSurfaceScale(3.0f);
             setEffect(l);
-            setArcHeight(10);
-            setArcWidth(10);
         }
     }
 

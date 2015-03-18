@@ -18,7 +18,7 @@ public class Ball extends Circle {
     double xPos, yPos, speedY, speedX, initialSpeedY;
     static double radius = 8;
 
-    public Ball(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
+    public Ball(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle, int rate) {
         super(startX, startY, radius);
         this.xPos = startX;
         this.yPos = startY;
@@ -30,7 +30,7 @@ public class Ball extends Circle {
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(60),
                 e -> ballMovement(gameWindow, gamePaddle)));
         animation.setCycleCount(Timeline.INDEFINITE);
-        animation.setRate(7);
+        animation.setRate(rate);
         animation.play();
     }
 
@@ -52,8 +52,7 @@ public class Ball extends Circle {
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
-                Controller.bricksLeft = Brick.bricks.size();
-                if (getCenterY() < 270 && getCenterY() > 10 && getCenterX() < 747 && getCenterX() > 40) {
+                if (getCenterY() < 265 && getCenterY() > 35 && getCenterX() < 775 && getCenterX() > 38) {
                     try {
                         for (Brick brick : Brick.bricks) {
                             boolean xx = ((getCenterX() > (brick.getLayoutX() - getRadius())) && (getCenterX() < (brick.getLayoutX() + brick.getWidth() + getRadius())));
@@ -66,21 +65,37 @@ public class Ball extends Circle {
                             if (((right && (speedX < 0)) || (left && (speedX > 0))) && yy) {
                                 noiceMaker(smashS);
                                 speedX = -speedX;
-                                if (brick.getFill() == Color.DARKRED) {
-                                    brick.setFill(Color.DARKGRAY);
+                                if (brick.getFill() == Color.DARKBLUE) {
+                                    brick.setFill(Color.RED);
+                                    brick.setArcHeight(10);
+                                    brick.setArcWidth(10);
+                                } else if(brick.getFill() == Color.RED) {
+                                    brick.setFill(Color.WHITE);
+                                    brick.setArcHeight(20);
+                                    brick.setArcWidth(20);
                                 } else {
                                     Brick.bricks.remove(brick);
-                                    gameWindow.getChildren().remove(brick);
+                                    Controller.bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
+                                    gameWindow.getChildren().removeAll(brick);
+//                                    int lucky = rand.nextInt(11);
+//                                        Controller.powerMeUp(lucky, gameWindow);
                                 }
                             }
                             if (xx && ((top && (speedY < 0)) || (bottom && (speedY > 0)))) {
                                 noiceMaker(smashS);
                                 speedY = -speedY;
-                                if (brick.getFill() == Color.DARKRED) {
-                                    brick.setFill(Color.DARKGRAY);
+                                if (brick.getFill() == Color.DARKBLUE) {
+                                    brick.setFill(Color.RED);
+                                    brick.setArcHeight(10);
+                                    brick.setArcWidth(10);
+                                } else if(brick.getFill() == Color.RED) {
+                                    brick.setFill(Color.WHITE);
+                                    brick.setArcHeight(20);
+                                    brick.setArcWidth(20);
                                 } else {
                                     Brick.bricks.remove(brick);
-                                    gameWindow.getChildren().remove(brick);
+                                    Controller.bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
+                                    gameWindow.getChildren().removeAll(brick);
                                 }
                             }
                         }
