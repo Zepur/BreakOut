@@ -2,8 +2,6 @@ package breakOutPkge;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -38,12 +36,7 @@ public class Ball extends Circle {
 
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
 
-        Controller.muteButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Controller.muteUnmute();
-            }
-        });
+        Controller.muteButton.setOnMousePressed(e -> Controller.muteUnmute());
 
         if(Controller.isPlaying){
             setCenterX(getCenterX() + speedX);
@@ -59,6 +52,7 @@ public class Ball extends Circle {
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
+                Controller.bricksLeft = Brick.bricks.size();
                 if (getCenterY() < 270 && getCenterY() > 10 && getCenterX() < 747 && getCenterX() > 40) {
                     try {
                         for (Brick brick : Brick.bricks) {
