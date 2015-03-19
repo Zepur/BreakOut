@@ -26,7 +26,7 @@ public class Ball extends Circle {
         this.speedX = speedX;
         this.speedY = speedY;
         this.initialSpeedY = speedY;
-        this.setFill(Color.ORANGE);
+        this.setFill(Color.LEMONCHIFFON);
 
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(60),
                 e -> ballMovement(gameWindow, gamePaddle)));
@@ -111,15 +111,42 @@ public class Ball extends Circle {
                     }
                 }
             }
-            if (gamePaddle.collides(this)) {
-                boolean xx = ((getCenterX() >= gamePaddle.getX()) && (getCenterX() <= (gamePaddle.getX() + gamePaddle.getWidth())));
+
+            if (((getCenterY() >= 440) && (getCenterY() <= 450))){
+//                boolean xxLEFT = (((getCenterX()+getRadius())-gamePaddle.getX() >= -1) && ((getCenterX()+getRadius())-gamePaddle.getX() <= 1) && gamePaddle.collides(this));
+//                boolean xxRIGHT = (((getCenterX()-getRadius())-(gamePaddle.getX()+gamePaddle.getWidth()) >= -1) && ((getCenterX()+getRadius())-(gamePaddle.getX()+gamePaddle.getWidth()) <= 1));
+//                boolean xx = ((getCenterX() >= gamePaddle.getX()) && (getCenterX() <= (gamePaddle.getX() + gamePaddle.getWidth())));
+//                boolean yy = ((((getCenterY() + getRadius()) - gamePaddle.getY()) >= -1) && (((getCenterY() - getRadius()) - gamePaddle.getY()) <= 1));
+////                boolean left = (((gamePaddle.getLayoutX() - ballPosRIGHT) <= 1) && ((gamePaddle.getLayoutX() - ballPosRIGHT) >= -1));
+////                boolean right = (((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getLayoutX())) <= 1) && ((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getLayoutX())) >= -1));
+////                boolean bottom = (((getCenterY() - (gamePaddle.getLayoutY() + gamePaddle.getHeight() + getRadius())) <= 1) && ((getCenterY() - (gamePaddle.getLayoutY() + gamePaddle.getHeight() + getRadius())) >= -1));
+////                boolean top = (((ballPosDOWN - gamePaddle.getLayoutY()) <= 1) && ((ballPosDOWN - gamePaddle.getLayoutY()) >= -1));
+////                boolean xx = ((getCenterX() >= gamePaddle.getX()) && (getCenterX() <= (gamePaddle.getX() + gamePaddle.getWidth())));
+////                boolean left = (((gamePaddle.getX() - ballPosRIGHT) <= 1) && ((gamePaddle.getX() - ballPosRIGHT) >= -1));
+////                boolean right = (((getCenterX() - (getRadius() + gamePaddle.getWidth() + gamePaddle.getX())) <= 1) && ((getCenterX() - (getRadius() + gamePaddle.getWidth() + gamePaddle.getX())) >= -1));
+//                if (xxLEFT || xxRIGHT) {
+//                    noiceMaker(padS);
+//                    speedX = -speedX;
+//                    speedY = 0;
+//                }
+//                if (yy && xx) {
+//                    noiceMaker(padS);
+//                    speedY = -speedY;
+//                }
+
+                boolean xx = ((getCenterX() > (gamePaddle.getX() - getRadius())) && (getCenterX() < (gamePaddle.getX() + gamePaddle.getWidth() + getRadius())));
+                boolean yy = ((getCenterY() < gamePaddle.getY() + getRadius() + gamePaddle.getHeight()) && (getCenterY() > gamePaddle.getY() - getRadius()));
                 boolean left = (((gamePaddle.getX() - ballPosRIGHT) <= 1) && ((gamePaddle.getX() - ballPosRIGHT) >= -1));
-                boolean right = (((getCenterX() - (getRadius() + gamePaddle.getWidth() + gamePaddle.getX())) <= 1) && ((getCenterX() - (getRadius() + gamePaddle.getWidth() + gamePaddle.getX())) >= -1));
-                if ((right && (speedX < 0)) || (left && (speedX > 0))) {
+                boolean right = (((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getX())) <= 1) && ((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getX())) >= -1));
+                boolean bottom = (((getCenterY() - (gamePaddle.getY() + gamePaddle.getHeight() + getRadius())) <= 1) && ((getCenterY() - (gamePaddle.getY() + gamePaddle.getHeight() + getRadius())) >= -1));
+                boolean top = (((ballPosDOWN - gamePaddle.getY()) <= 1) && ((ballPosDOWN - gamePaddle.getY()) >= -1));
+
+                if (((right && (speedX < 0)) || (left && (speedX > 0))) && yy) {
                     noiceMaker(padS);
                     speedX = -speedX;
                 }
-                if (xx) {
+
+                if (xx && ((top && (speedY < 0)) || (bottom && (speedY > 0)))) {
                     noiceMaker(padS);
                     speedY = -speedY;
                 }

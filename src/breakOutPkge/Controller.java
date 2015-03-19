@@ -103,8 +103,8 @@ public class Controller {
         double hVelocity = getSpeed(true);
         double vVelocity = getSpeed(false);
         ball = new Ball(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle, (isHard ? 15 : 10));
-        ball.setCenterY(380);
-        ball.setCenterX(200);
+        ball.setCenterY(420);
+        ball.setCenterX(396);
 
         gameWindow.setCursor(Cursor.CROSSHAIR);
         gameWindow.getChildren().add(bricksLeftInfoLabel);
@@ -192,7 +192,6 @@ public class Controller {
 
                     Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1500), e -> {
                         powerUPpadSize.setCenterX(powerUPpadSize.getCenterX() + 10);
-                        System.out.println(powerUPpadSize.getCenterX());
                         gameWindow.getChildren().removeAll(powerUPpadSize);
                         powerUP = false;
                     }));
