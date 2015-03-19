@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -41,26 +42,22 @@ public class Controller {
     public static MediaPlayer jukeBox;
     public static int levelNumber = 1;
     public static int lives = 3;
-    public static int bricksLeft;
     public static double hVelocity, vVelocity;
     public static Rectangle muteButton = new Rectangle();
-    public static Rectangle powerUPpadSize = new Rectangle(40, 40, Color.ALICEBLUE);
+    public static Circle powerUPpadSize = new Circle(40, 490, 15, Color.ALICEBLUE);
     static Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
     static Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
     static ImagePattern unmutedIMG = new ImagePattern(unmuted);
     static ImagePattern mutedIMG = new ImagePattern(muted);
     public static boolean isPlaying = false;
+    public static boolean powerUP = false;
     static public boolean isMuted = false;
     static Ball ball;
     static Paddle gamePaddle;
     protected static long startTime;
+    protected static long stopTime;
 
     public void setup(int width, int height, boolean isHard){
-        powerUPpadSize.setArcWidth(20);
-        powerUPpadSize.setArcHeight(20);
-        powerUPpadSize.setX(30);
-        powerUPpadSize.setY(400);
-        powerUPpadSize.setRotate(45);
         powerUPpadSize.setOnMousePressed(e -> {
             gamePaddle.setWidth(100);
             gameWindow.getChildren().removeAll(powerUPpadSize);
@@ -78,6 +75,8 @@ public class Controller {
 
         muteButton.setWidth(30);
         muteButton.setHeight(30);
+        muteButton.setLayoutX(380);
+        muteButton.setLayoutY(545);
         muteButton.setFill(unmutedIMG);
 
         score.setText(String.valueOf(lives));
@@ -96,19 +95,18 @@ public class Controller {
         bigButton.setMinHeight(70);
         bigButton.setTextFill(Color.WHITE);
 
-        gameWindow.setCursor(Cursor.CROSSHAIR);
         gamePaddle = new Paddle(gameWindow, width, height);
         clickToPlayLabel.setText(null);
         easy.setVisible(false);
         hard.setVisible(false);
-        muteButton.setLayoutX(380);
-        muteButton.setLayoutY(545);
+
         double hVelocity = getSpeed(true);
         double vVelocity = getSpeed(false);
         ball = new Ball(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle, (isHard ? 15 : 10));
         ball.setCenterY(380);
         ball.setCenterX(200);
 
+        gameWindow.setCursor(Cursor.CROSSHAIR);
         gameWindow.getChildren().add(bricksLeftInfoLabel);
         gameWindow.getChildren().add(bricksLeftLabel);
         gameWindow.getChildren().add(score);
@@ -118,6 +116,28 @@ public class Controller {
         gameWindow.getChildren().add(bigLabel);
         gameWindow.getChildren().add(bigButton);
         startLVL(gameWindow);
+    }
+
+    private double getSpeed(boolean isH){
+        Random randX = new Random();
+        Random randY = new Random();
+        int randomDirection = randX.nextInt(10)+2;
+        boolean leftOrRight = randomDirection%2 != 0;
+        int speedXX = (randX.nextInt(4) + 10);
+        int speedYY = (randY.nextInt(4) + 10);
+        vVelocity = (double)speedYY/10;
+        double hVelTemp = (double)speedXX/10;
+        hVelocity = leftOrRight ? hVelTemp : -hVelTemp;
+        return isH ? hVelocity : vVelocity;
+    }
+
+    public static void startLVL(Pane gameWindow) {
+        bigButton.setText("Start");
+        bigButton.setStyle("-fx-background-color: green; -fx-font-size: 30; -fx-font-weight:bold;");
+        bigButton.setOnAction(e -> {
+            startTime = System.currentTimeMillis();
+            addBricks(gameWindow);
+        });
     }
 
     private static void addBricks(Pane gameWindow) {
@@ -157,6 +177,7 @@ public class Controller {
         decrease(target, lvl2);
     }
 
+
     public static void muteUnmute(){
         isMuted = !isMuted;
         muteButton.setFill((isMuted ? mutedIMG : unmutedIMG));
@@ -165,29 +186,22 @@ public class Controller {
     public static void powerMeUp(int number, Pane gameWindow){
         switch (number){
             case 0:case 1:case 2:case 3:
-                gameWindow.getChildren().add(powerUPpadSize);
+                if(!powerUP) {
+                    powerUP = true;
+                    gameWindow.getChildren().add(powerUPpadSize);
 
-                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1500), e ->
-                        gameWindow.getChildren().removeAll(powerUPpadSize)
-                ));
-                timeline.play();
+                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1500), e -> {
+                        powerUPpadSize.setCenterX(powerUPpadSize.getCenterX() + 10);
+                        System.out.println(powerUPpadSize.getCenterX());
+                        gameWindow.getChildren().removeAll(powerUPpadSize);
+                        powerUP = false;
+                    }));
+                    timeline.play();
+                }
                 break;
             default:
                 break;
         }
-    }
-
-    private double getSpeed(boolean isH){
-        Random randX = new Random();
-        Random randY = new Random();
-        int randomDirection = randX.nextInt(10)+2;
-        boolean leftOrRight = randomDirection%2 != 0;
-        int speedXX = (randX.nextInt(4) + 10);
-        int speedYY = (randY.nextInt(4) + 10);
-        vVelocity = (double)speedYY/10;
-        double hVelTemp = (double)speedXX/10;
-        hVelocity = leftOrRight ? hVelTemp : -hVelTemp;
-        return isH ? hVelocity : vVelocity;
     }
 
     public void startEasy(){
@@ -195,15 +209,6 @@ public class Controller {
     }
     public void startHard(){
         setup(70, 20, true);
-    }
-
-    public static void startLVL(Pane gameWindow) {
-        bigButton.setText("Start");
-        bigButton.setStyle("-fx-background-color: green; -fx-font-size: 30; -fx-font-weight:bold;");
-        bigButton.setOnAction(e -> {
-            startTime = System.currentTimeMillis() / 1000;
-            addBricks(gameWindow);
-        });
     }
 
     public static void betweenLVLs(Pane gameWindow) {

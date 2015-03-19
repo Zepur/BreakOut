@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.util.ConcurrentModificationException;
+import java.util.Random;
 
 public class Ball extends Circle {
     public Media boundS = new Media(getClass().getResource("plink.mp3").toString());
@@ -46,6 +47,8 @@ public class Ball extends Circle {
             double ballPosTOP = (getCenterY() - getRadius());
             double ballPosDOWN = (getCenterY() + getRadius());
             if(Brick.bricks.size()==0) {
+                Controller.stopTime = System.currentTimeMillis();
+                System.out.println((Controller.stopTime-Controller.startTime)/1000);
                 setCenterX(400-getRadius());
                 setCenterY(380);
                 speedY = initialSpeedY;
@@ -77,10 +80,14 @@ public class Ball extends Circle {
                                     Brick.bricks.remove(brick);
                                     Controller.bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
                                     gameWindow.getChildren().removeAll(brick);
-//                                    int lucky = rand.nextInt(11);
-//                                        Controller.powerMeUp(lucky, gameWindow);
+                                    if(gameWindow.getChildren().indexOf(Controller.powerUPpadSize) != 0){
+                                        Random rand = new Random();
+                                        int lucky = rand.nextInt(11);
+                                        Controller.powerMeUp(lucky, gameWindow);
+                                    }
                                 }
                             }
+
                             if (xx && ((top && (speedY < 0)) || (bottom && (speedY > 0)))) {
                                 noiceMaker(smashS);
                                 speedY = -speedY;

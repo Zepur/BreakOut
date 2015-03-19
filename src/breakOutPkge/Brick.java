@@ -28,7 +28,7 @@ public class Brick extends Rectangle {
         lightEffect.setLight(light);
         lightEffect.setSurfaceScale(3.4f);
         switch (lvl){
-            case 1:
+            case 3:
                 switch (row){
                     case 0:case 8:
                         setFill(Color.HOTPINK);
@@ -117,7 +117,7 @@ public class Brick extends Rectangle {
                     bricks.add(this);
                 }
                 break;
-            case 3:
+            case 1:
                 if (row == 6 || row == 7 || column == 4 || column == 5){
                     setFill(Color.DARKBLUE);
                     setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
