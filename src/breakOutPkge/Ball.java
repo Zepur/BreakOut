@@ -54,7 +54,7 @@ public class Ball extends Circle {
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
-                if (getCenterY() < 265 && getCenterY() > 35 && getCenterX() < 775 && getCenterX() > 38) {
+                if (getCenterY() < 280 && getCenterY() > 45 && getCenterX() < 857 && getCenterX() > 55) {
                     try {
                         for (Brick brick : Brick.bricks) {
                             boolean xx = ((getCenterX() > (brick.getLayoutX() - getRadius())) && (getCenterX() < (brick.getLayoutX() + brick.getWidth() + getRadius())));

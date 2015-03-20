@@ -188,6 +188,7 @@ public class Controller {
         for(Brick brick : Brick.bricks){
             gameWindow.getChildren().add(brick);
         }
+        gameWindow.requestFocus();
         isPlaying = true;
     }
 

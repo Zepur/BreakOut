@@ -13,9 +13,9 @@ import java.util.ConcurrentModificationException;
 import java.util.Random;
 
 public class Ball2 extends Circle {
-    public Media boundS = new Media(getClass().getResource("plink.mp3").toString());
-    public Media padS = new Media(getClass().getResource("plinklo.mp3").toString());
-    public Media smashS = new Media(getClass().getResource("smash.mp3").toString());
+    public final Media BOUNDS_SOUND = new Media(getClass().getResource("plink.mp3").toString());
+    public final Media PAD_SOUND = new Media(getClass().getResource("plinklo.mp3").toString());
+    public final Media SMASH_SOUND = new Media(getClass().getResource("smash.mp3").toString());
     double xPos, yPos, speedY, speedX, initialSpeedY;
     static double radius = 8;
     static int speedRate;
@@ -28,6 +28,22 @@ public class Ball2 extends Circle {
         this.speedY = speedY;
         this.initialSpeedY = speedY;
         this.setFill(Color.LEMONCHIFFON);
+        int gridX1 = 60;
+        int gridX2 = 113;
+        int gridX3 = 166;
+        int gridX4 = 166;
+        int gridX5 = 219;
+        int gridX6 = 272;
+        int gridX7 = 325;
+        int gridX8 = 378;
+        int gridX9 = 431;
+        int gridX10 = 484;
+        int gridX11 = 537;
+        int gridX12 = 590;
+        int gridX13 = 643;
+        int gridX14 = 696;
+        int gridX15 = 749;
+        int gridX16 = 802;
 
         Timeline animation = new Timeline(new KeyFrame(Duration.millis(60),
                 e -> ballMovement(gameWindow, gamePaddle)));
@@ -53,61 +69,8 @@ public class Ball2 extends Circle {
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
-                if (getCenterY() < 265 && getCenterY() > 35 && getCenterX() < 775 && getCenterX() > 38) {
-                    try {
-                        for (Brick brick : Brick.bricks) {
-                            boolean xx = ((getCenterX() > (brick.getLayoutX() - getRadius())) && (getCenterX() < (brick.getLayoutX() + brick.getWidth() + getRadius())));
-                            boolean yy = ((getCenterY() < brick.getLayoutY() + getRadius() + brick.getHeight()) && (getCenterY() > brick.getLayoutY() - getRadius()));
-                            boolean left = (((brick.getLayoutX() - ballPosRIGHT) <= 1) && ((brick.getLayoutX() - ballPosRIGHT) >= -1));
-                            boolean right = (((ballPosLEFT - (brick.getWidth() + brick.getLayoutX())) <= 1) && ((ballPosLEFT - (brick.getWidth() + brick.getLayoutX())) >= -1));
-                            boolean bottom = (((getCenterY() - (brick.getLayoutY() + brick.getHeight() + getRadius())) <= 1) && ((getCenterY() - (brick.getLayoutY() + brick.getHeight() + getRadius())) >= -1));
-                            boolean top = (((ballPosDOWN - brick.getLayoutY()) <= 1) && ((ballPosDOWN - brick.getLayoutY()) >= -1));
-
-                            if (((right && (speedX < 0)) || (left && (speedX > 0))) && yy) {
-                                noiceMaker(smashS);
-                                speedX = -speedX;
-                                if (brick.getFill() == Color.DARKBLUE) {
-                                    brick.setFill(Color.RED);
-                                    brick.setArcHeight(10);
-                                    brick.setArcWidth(10);
-                                } else if(brick.getFill() == Color.RED) {
-                                    brick.setFill(Color.WHITE);
-                                    brick.setArcHeight(20);
-                                    brick.setArcWidth(20);
-                                } else {
-                                    Brick.bricks.remove(brick);
-                                    Controller.bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
-                                    gameWindow.getChildren().removeAll(brick);
-                                    if(gameWindow.getChildren().indexOf(Controller.powerUPpadSize) != 0){
-                                        Random rand = new Random();
-                                        int lucky = rand.nextInt(11);
-                                        Controller.powerMeUp(lucky, gameWindow);
-                                    }
-                                }
-                            }
-
-                            if (xx && ((top && (speedY < 0)) || (bottom && (speedY > 0)))) {
-                                noiceMaker(smashS);
-                                speedY = -speedY;
-                                if (brick.getFill() == Color.DARKBLUE) {
-                                    brick.setFill(Color.RED);
-                                    brick.setArcHeight(10);
-                                    brick.setArcWidth(10);
-                                } else if(brick.getFill() == Color.RED) {
-                                    brick.setFill(Color.WHITE);
-                                    brick.setArcHeight(20);
-                                    brick.setArcWidth(20);
-                                } else {
-                                    Brick.bricks.remove(brick);
-                                    Controller.bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
-                                    gameWindow.getChildren().removeAll(brick);
-                                }
-                            }
-                        }
-                    } catch (ConcurrentModificationException e) {
-//                    e.printStackTrace();
-                    }
-                }
+                if(getCenterX() == 60)
+                    System.out.println("ok");
             }
 
             if (((getCenterY() >= 440) && (getCenterY() <= 450))){
@@ -118,11 +81,11 @@ public class Ball2 extends Circle {
                 boolean bottom = (((getCenterY() - (gamePaddle.getY() + gamePaddle.getHeight() + getRadius())) <= 1) && ((getCenterY() - (gamePaddle.getY() + gamePaddle.getHeight() + getRadius())) >= -1));
                 boolean top = (((ballPosDOWN - gamePaddle.getY()) <= 1) && ((ballPosDOWN - gamePaddle.getY()) >= -1));
                 if (((right && (speedX < 0)) || (left && (speedX > 0))) && yy) {
-                    noiceMaker(padS);
+                    noiceMaker(PAD_SOUND);
                     speedX = -speedX;
                 }
                 if (xx && ((top && (speedY < 0)) || (bottom && (speedY > 0)))) {
-                    noiceMaker(padS);
+                    noiceMaker(PAD_SOUND);
                     speedY = -speedY;
                 }
             }
@@ -133,11 +96,11 @@ public class Ball2 extends Circle {
                 boolean atBottomBorder = getCenterY() > (gamePaddle.getY() + gamePaddle.getHeight() + getRadius());
                 boolean atTopBorder = ballPosTOP <= 1;
                 if (atRightBorder || atLeftBorder) {
-                    noiceMaker(boundS);
+                    noiceMaker(BOUNDS_SOUND);
                     speedX = -speedX;
                 }
                 if (atTopBorder) {
-                    noiceMaker(boundS);
+                    noiceMaker(BOUNDS_SOUND);
                     speedY = -speedY;
                 }
                 if (atBottomBorder) {
