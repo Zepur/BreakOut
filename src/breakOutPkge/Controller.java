@@ -6,8 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -31,9 +36,10 @@ public class Controller {
     @FXML
     Label clickToPlayLabel;
     @FXML
-    Button easy;
-    @FXML
-    Button hard;
+    Rectangle startButton;
+
+    static Button easyButton = new Button("Easy");
+    static Button hardButton = new Button("Hard");
     static Label bigLabel = new Label();
     static Button bigButton = new Button();
     static Label score = new Label();
@@ -52,15 +58,21 @@ public class Controller {
     public static boolean isPlaying = false;
     public static boolean powerUP = false;
     static public boolean isMuted = false;
-    static Ball ball;
+    static Ball2 ball;
     static Paddle gamePaddle;
     protected static long startTime;
     protected static long stopTime;
 
-    public void setup(int width, int height, boolean isHard){
+    public void setup(){
         powerUPpadSize.setOnMousePressed(e -> {
             gamePaddle.setWidth(100);
             gameWindow.getChildren().removeAll(powerUPpadSize);
+        });
+
+        gameWindow.setOnKeyPressed(e -> {
+            System.out.println(e.getCode());
+            if(e.getCode() == KeyCode.SPACE)
+                Ball2.speedRate = 0;
         });
 
         bricksLeftInfoLabel.setLayoutX(35);
@@ -78,6 +90,7 @@ public class Controller {
         muteButton.setLayoutX(380);
         muteButton.setLayoutY(545);
         muteButton.setFill(unmutedIMG);
+        muteButton.setOnMousePressed(e -> muteUnmute() );
 
         score.setText(String.valueOf(lives));
         score.setTextFill(Color.WHITE);
@@ -95,16 +108,48 @@ public class Controller {
         bigButton.setMinHeight(70);
         bigButton.setTextFill(Color.WHITE);
 
-        gamePaddle = new Paddle(gameWindow, width, height);
-        clickToPlayLabel.setText(null);
-        easy.setVisible(false);
-        hard.setVisible(false);
+        easyButton.setTextFill(Color.WHITE);
+        easyButton.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, null, null)));
+        easyButton.setLayoutX(300);
+        easyButton.setLayoutY(300);
+        easyButton.setMinWidth(100);
+        easyButton.setMinHeight(40);
+        easyButton.setOnMousePressed(e -> {
+            double hVelocity = getSpeed(true);
+            double vVelocity = getSpeed(false);
+            Ball2.speedRate = 10;
+            ball = new Ball2(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle);
+            ball.setCenterY(420);
+            ball.setCenterX(396);
+            gameWindow.getChildren().add(ball);
+            gameWindow.getChildren().remove(easyButton);
+            gameWindow.getChildren().remove(hardButton);
+            startTime = System.currentTimeMillis();
+            addBricks(gameWindow);
+        });
 
-        double hVelocity = getSpeed(true);
-        double vVelocity = getSpeed(false);
-        ball = new Ball(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle, (isHard ? 15 : 10));
-        ball.setCenterY(420);
-        ball.setCenterX(396);
+        hardButton.setTextFill(Color.WHITE);
+        hardButton.setBackground(new Background(new BackgroundFill(Color.DARKRED, null, null)));
+        hardButton.setLayoutX(500);
+        hardButton.setLayoutY(300);
+        hardButton.setMinWidth(100);
+        hardButton.setMinHeight(40);
+        hardButton.setOnMousePressed(e -> {
+            double hVelocity = getSpeed(true);
+            double vVelocity = getSpeed(false);
+            Ball2.speedRate = 15;
+            ball = new Ball2(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle);
+            ball.setCenterY(420);
+            ball.setCenterX(396);
+            gameWindow.getChildren().add(ball);
+            gameWindow.getChildren().remove(easyButton);
+            gameWindow.getChildren().remove(hardButton);
+            startTime = System.currentTimeMillis();
+            addBricks(gameWindow);
+        });
+        gamePaddle = new Paddle(gameWindow, 70, 20);
+        gameWindow.getChildren().remove(startButton);
+        gameWindow.getChildren().remove(clickToPlayLabel);
 
         gameWindow.setCursor(Cursor.CROSSHAIR);
         gameWindow.getChildren().add(bricksLeftInfoLabel);
@@ -112,13 +157,12 @@ public class Controller {
         gameWindow.getChildren().add(score);
         gameWindow.getChildren().add(gamePaddle);
         gameWindow.getChildren().add(muteButton);
-        gameWindow.getChildren().add(ball);
         gameWindow.getChildren().add(bigLabel);
-        gameWindow.getChildren().add(bigButton);
+
         startLVL(gameWindow);
     }
 
-    private double getSpeed(boolean isH){
+    private static double getSpeed(boolean isH){
         Random randX = new Random();
         Random randY = new Random();
         int randomDirection = randX.nextInt(10)+2;
@@ -132,12 +176,8 @@ public class Controller {
     }
 
     public static void startLVL(Pane gameWindow) {
-        bigButton.setText("Start");
-        bigButton.setStyle("-fx-background-color: green; -fx-font-size: 30; -fx-font-weight:bold;");
-        bigButton.setOnAction(e -> {
-            startTime = System.currentTimeMillis();
-            addBricks(gameWindow);
-        });
+        gameWindow.getChildren().add(easyButton);
+        gameWindow.getChildren().add(hardButton);
     }
 
     private static void addBricks(Pane gameWindow) {
@@ -154,8 +194,24 @@ public class Controller {
     private static void getBricks(Pane gameWindow, int numRows, int numCols) {
         for (int row = 0; row < numRows; row++) {
             for (int column = 0; column < numCols; column++) {
-                new Brick(gameWindow, row, column, Controller.levelNumber, 15, 10);
+                new Brick(gameWindow, row, column, Controller.levelNumber, 15);
             }
+        }
+        Light.Distant light = new Light.Distant();
+        Lighting l = new Lighting();
+        light.setAzimuth(-75.0f);
+
+        Lighting lightEffect = new Lighting();
+        lightEffect.setLight(light);
+        lightEffect.setSurfaceScale(3.4f);
+        int count = 0;
+        for(Brick brick : Brick.bricks){
+            light.setAzimuth(-70.0f);
+            l.setLight(light);
+            l.setSurfaceScale(3.0f);
+            brick.setEffect(l);
+            System.out.println(count+" = x: "+brick.getLayoutX()+", y: "+brick.getLayoutY());
+            count++;
         }
         bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
     }
@@ -202,13 +258,13 @@ public class Controller {
                 break;
         }
     }
-
-    public void startEasy(){
-        setup(80, 20, false);
-    }
-    public void startHard(){
-        setup(70, 20, true);
-    }
+//
+//    public void startEasy(){
+//        setup(80, 20);
+//    }
+//    public void startHard(){
+//        setup(70, 20);
+//    }
 
     public static void betweenLVLs(Pane gameWindow) {
         bigLabel.setText("You beat lvl: " + levelNumber + "!\n");

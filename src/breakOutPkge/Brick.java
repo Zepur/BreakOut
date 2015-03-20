@@ -1,7 +1,5 @@
 package breakOutPkge;
 
-import javafx.scene.effect.Light;
-import javafx.scene.effect.Lighting;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -9,25 +7,18 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class Brick extends Rectangle {
-    final static int BRICK_WIDTH = 45;
-    final static int BRICK_HEIGHT = 18;
+    final static int BRICK_WIDTH = 50;
+    final static int BRICK_HEIGHT = 20;
     int hGap = 3;
     int vGap = 3;
 
     public static ArrayList<Brick> bricks = new ArrayList<>();
-    private static Light.Distant light = new Light.Distant();
-    private static Lighting l = new Lighting();
 
-    public Brick(Pane gameWindow, int row, int column, int lvl, int numRows, int numColms) {
+    public Brick(Pane gameWindow, int row, int column, int lvl, int numRows) {
         super(BRICK_WIDTH, BRICK_HEIGHT);
         double startPosX = ((gameWindow.getWidth() - ((BRICK_WIDTH*numRows)+(14*hGap))) / 2);
 
-        light.setAzimuth(-75.0f);
-
-        Lighting lightEffect = new Lighting();
-        lightEffect.setLight(light);
-        lightEffect.setSurfaceScale(3.4f);
-        switch (lvl){
+                switch (lvl){
             case 1:
                 switch (row){
                     case 0:case 8:
@@ -140,16 +131,9 @@ public class Brick extends Rectangle {
                 }
                 break;
         }
-
-        for(Brick brick : bricks){
-            light.setAzimuth(-70.0f);
-            l.setLight(light);
-            l.setSurfaceScale(3.0f);
-            setEffect(l);
-        }
     }
 
-    public boolean collides(Ball ball) {
+    public boolean collides(Ball2 ball) {
         return ball.intersects(getLayoutX(), getLayoutY(), getWidth(), getHeight());
     }
 }

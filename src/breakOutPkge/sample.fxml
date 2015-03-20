@@ -7,11 +7,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="playWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="breakOutPkge.Controller">
+<AnchorPane fx:id="playWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="breakOutPkge.Controller">
     <children>
         <Pane fx:id="gameWindow" layoutX="250.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="800.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-               <Label fx:id="clickToPlayLabel" layoutX="179.0" layoutY="157.0" style="-fx-font-size: 60;" text="Choose difficulty" textAlignment="CENTER">
+               <Label fx:id="clickToPlayLabel" layoutX="289.0" layoutY="160.0" style="-fx-font-size: 60;" text="Click to play" textAlignment="CENTER">
                <textFill>
                   <LinearGradient endX="0.14563106796116504" endY="0.12135922330097088" startX="1.0" startY="1.0">
                      <stops>
@@ -22,16 +22,7 @@
                      </stops>
                   </LinearGradient>
                </textFill></Label>
-            <Button fx:id="easy" layoutX="279.0" layoutY="300.0" mnemonicParsing="false" onMousePressed="#startEasy" style="-fx-background-color: black; -fx-border-color: #2bff00; -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10;" text="EASY" textAlignment="CENTER" textFill="#2bff00">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
-            <Button fx:id="hard" layoutX="428.0" layoutY="300.0" mnemonicParsing="false" onMousePressed="#startHard" style="-fx-background-color: black; -fx-border-color: #ff4200; -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10;" text="HARD" textAlignment="CENTER" textFill="#ff4200">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
+            <Rectangle fx:id="startButton" arcHeight="40.0" arcWidth="40.0" fill="#1f93ff8e" height="200.0" layoutX="350.0" layoutY="267.0" onMousePressed="#setup" stroke="BLACK" strokeType="INSIDE" width="200.0" />
             </children></Pane>
         <Label fx:id="scoreLabel" layoutX="35.0" layoutY="550.0" style="-fx-font-size: 14; -fx-font-weight: bold;" text="Balls remaining:" textFill="#666666">
             <font>

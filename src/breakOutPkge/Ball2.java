@@ -12,7 +12,7 @@ import javafx.util.Duration;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
 
-public class Ball extends Circle {
+public class Ball2 extends Circle {
     public Media boundS = new Media(getClass().getResource("plink.mp3").toString());
     public Media padS = new Media(getClass().getResource("plinklo.mp3").toString());
     public Media smashS = new Media(getClass().getResource("smash.mp3").toString());
@@ -20,7 +20,7 @@ public class Ball extends Circle {
     static double radius = 8;
     static int speedRate;
 
-    public Ball(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
+    public Ball2(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
         super(startX, startY, radius);
         this.xPos = startX;
         this.yPos = startY;
@@ -37,7 +37,6 @@ public class Ball extends Circle {
     }
 
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
-        Controller.muteButton.setOnMousePressed(e -> Controller.muteUnmute());
         if(Controller.isPlaying){
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY()-speedY);

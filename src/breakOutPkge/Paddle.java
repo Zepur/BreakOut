@@ -14,7 +14,7 @@ public class Paddle extends Rectangle {
             gameWindow.setOnMouseMoved(e -> setX((e.getX() - 50)));
     }
 
-    public boolean collides(Ball ball) {
+    public boolean collides(Ball2 ball) {
         return ball.intersects(getX(), getY(), getWidth(), getHeight());
     }
 }
