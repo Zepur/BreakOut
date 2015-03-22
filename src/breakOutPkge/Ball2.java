@@ -63,49 +63,49 @@ public class Ball2 extends Circle {
                 Controller.isPlaying = false;
             } else {
                 if(((((getCenterX() + getRadius()) >= gridX[0]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[0] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[0]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[0]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[0]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[0])))) {
                     xB = 1;
                 } else if(((((getCenterX() + getRadius()) >= gridX[1]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[1] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[1]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[1]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[1]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[1])))) {
                     xB = 2;
                 } else if(((((getCenterX() + getRadius()) >= gridX[2]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[2] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[2]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[2]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[2]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[2])))) {
                     xB = 3;
                 } else if(((((getCenterX() + getRadius()) >= gridX[3]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[3] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[3]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[3]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[3]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[3])))) {
                     xB = 4;
                 } else if(((((getCenterX() + getRadius()) >= gridX[4]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[4] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[4]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[4]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[4]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[4])))) {
                     xB = 5;
                 } else if(((((getCenterX() + getRadius()) >= gridX[5]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[5] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[5]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[5]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[5]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[5])))) {
                     xB = 6;
                 } else if(((((getCenterX() + getRadius()) >= gridX[6]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[6] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[6]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[6]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[6]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[6])))) {
                     xB = 7;
                 } else if(((((getCenterX() + getRadius()) >= gridX[7]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[7] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[7]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[7]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[7]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[7])))) {
                     xB = 8;
                 } else if(((((getCenterX() + getRadius()) >= gridX[8]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[8] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[8]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[8]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[8]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[8])))) {
                     xB = 9;
                 } else if(((((getCenterX() + getRadius()) >= gridX[9]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[9] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[9]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[9]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[9]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[9])))) {
                     xB = 10;
                 } else if(((((getCenterX() + getRadius()) >= gridX[10]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[10] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[10]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[10]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[10]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[10])))) {
                     xB = 11;
                 } else if(((((getCenterX() + getRadius()) >= gridX[11]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[11] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[11]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[11]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[11]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[11])))) {
                     xB = 12;
                 } else if(((((getCenterX() + getRadius()) >= gridX[12]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[12] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[12]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[12]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[12]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[12])))) {
                     xB = 13;
                 } else if(((((getCenterX() + getRadius()) >= gridX[13]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[13] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[13]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[13]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[13]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[13])))) {
                     xB = 14;
                 } else if(((((getCenterX() + getRadius()) >= gridX[14]) && speedX > 0) && ((getCenterX() + getRadius()) <= (gridX[14] + Brick.BRICK_WIDTH)))
-                        || ((((getCenterX() - getRadius()) <= (gridX[14]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[14]+Brick.BRICK_WIDTH)))) {
+                        || ((((getCenterX() - getRadius()) <= (gridX[14]+Brick.BRICK_WIDTH)) && speedX < 0) && ((getCenterX() - getRadius()) >= (gridX[14])))) {
                     xB = 15;
                 } else
                     xB = 0;
