@@ -60,6 +60,7 @@ public class Controller {
     static public boolean isMuted = false;
     static Ball2 ball;
     static Paddle gamePaddle;
+    boolean paused = false;
     protected static long startTime;
     protected static long stopTime;
 
@@ -70,9 +71,13 @@ public class Controller {
         });
 
         gameWindow.setOnKeyPressed(e -> {
-            System.out.println(e.getCode());
-            if(e.getCode() == KeyCode.SPACE)
-                Ball2.speedRate = 0;
+            if(e.getCode() == KeyCode.SPACE) {
+                if (!paused)
+                    Ball2.animation.pause();
+                else
+                    Ball2.animation.play();
+                paused = !paused;
+            }
         });
 
         bricksLeftInfoLabel.setLayoutX(35);
@@ -118,7 +123,7 @@ public class Controller {
             double hVelocity = getSpeed(true);
             double vVelocity = getSpeed(false);
             Ball2.speedRate = 10;
-            ball = new Ball2(gameWindow, (gameWindow.getWidth()/2), 380, hVelocity, vVelocity, gamePaddle);
+            ball = new Ball2(gameWindow, 396, 420, hVelocity, vVelocity, gamePaddle);
             ball.setCenterY(420);
             ball.setCenterX(396);
             gameWindow.getChildren().add(ball);
@@ -184,7 +189,7 @@ public class Controller {
         gameWindow.getChildren().remove(bigLabel);
         gameWindow.getChildren().remove(bigButton);
         getBricks(gameWindow, 15, 10);
-        get20percent((levelNumber==2 ? 135 : (levelNumber==3 ? 150 : 120)));
+        get20percent((levelNumber==2 ? 135 : (levelNumber==3 ? 150 : 150)));
         for(Brick brick : Brick.bricks){
             gameWindow.getChildren().add(brick);
         }
@@ -193,8 +198,8 @@ public class Controller {
     }
 
     private static void getBricks(Pane gameWindow, int numRows, int numCols) {
-        for (int row = 0; row < numRows; row++) {
-            for (int column = 0; column < numCols; column++) {
+        for (int column = 0; column < numCols; column++) {
+            for (int row = 0; row < numRows; row++) {
                 new Brick(gameWindow, row, column, Controller.levelNumber, 15);
             }
         }
@@ -205,16 +210,13 @@ public class Controller {
         Lighting lightEffect = new Lighting();
         lightEffect.setLight(light);
         lightEffect.setSurfaceScale(3.4f);
-        int count = 0;
         for(Brick brick : Brick.bricks){
             light.setAzimuth(-70.0f);
             l.setLight(light);
             l.setSurfaceScale(3.0f);
             brick.setEffect(l);
-            System.out.println(count+" = x: "+brick.getLayoutX()+", y: "+brick.getLayoutY());
-            count++;
         }
-        bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
+        Ball2.ballsLeft = Brick.bricks.size();
     }
 
     private static void get20percent(int target){

@@ -16,7 +16,7 @@ public class Brick extends Rectangle {
 
     public Brick(Pane gameWindow, int row, int column, int lvl, int numRows) {
         super(BRICK_WIDTH, BRICK_HEIGHT);
-        double startPosX = ((gameWindow.getWidth() - ((BRICK_WIDTH*numRows)+(14*hGap))) / 2);
+        double startPosX = 60;
 
                 switch (lvl){
             case 1:

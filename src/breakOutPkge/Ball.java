@@ -19,6 +19,9 @@ public class Ball extends Circle {
     double xPos, yPos, speedY, speedX, initialSpeedY;
     static double radius = 8;
     static int speedRate;
+    int updateRemains = 0;
+    public static int ballsLeft;
+    public static Timeline animation = new Timeline();
 
     public Ball(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
         super(startX, startY, radius);
@@ -29,7 +32,7 @@ public class Ball extends Circle {
         this.initialSpeedY = speedY;
         this.setFill(Color.LEMONCHIFFON);
 
-        Timeline animation = new Timeline(new KeyFrame(Duration.millis(60),
+        animation = new Timeline(new KeyFrame(Duration.millis(60),
                 e -> ballMovement(gameWindow, gamePaddle)));
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.setRate(speedRate);
@@ -39,6 +42,11 @@ public class Ball extends Circle {
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
         Controller.muteButton.setOnMousePressed(e -> Controller.muteUnmute());
         if(Controller.isPlaying){
+            updateRemains++;
+            if(updateRemains == 15) {
+                Controller.bricksLeftLabel.setText(String.valueOf(ballsLeft));
+                updateRemains = 0;
+            }
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY()-speedY);
             double ballPosLEFT = (getCenterX() - getRadius());
@@ -54,9 +62,9 @@ public class Ball extends Circle {
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
-                if (getCenterY() < 280 && getCenterY() > 45 && getCenterX() < 857 && getCenterX() > 55) {
-                    try {
-                        for (Brick brick : Brick.bricks) {
+                try {
+                    for (Brick brick : Brick.bricks) {
+                        if (brick != null) {
                             boolean xx = ((getCenterX() > (brick.getLayoutX() - getRadius())) && (getCenterX() < (brick.getLayoutX() + brick.getWidth() + getRadius())));
                             boolean yy = ((getCenterY() < brick.getLayoutY() + getRadius() + brick.getHeight()) && (getCenterY() > brick.getLayoutY() - getRadius()));
                             boolean left = (((brick.getLayoutX() - ballPosRIGHT) <= 1) && ((brick.getLayoutX() - ballPosRIGHT) >= -1));
@@ -71,15 +79,15 @@ public class Ball extends Circle {
                                     brick.setFill(Color.RED);
                                     brick.setArcHeight(10);
                                     brick.setArcWidth(10);
-                                } else if(brick.getFill() == Color.RED) {
+                                } else if (brick.getFill() == Color.RED) {
                                     brick.setFill(Color.WHITE);
                                     brick.setArcHeight(20);
                                     brick.setArcWidth(20);
                                 } else {
-                                    Brick.bricks.remove(brick);
-                                    Controller.bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
                                     gameWindow.getChildren().removeAll(brick);
-                                    if(gameWindow.getChildren().indexOf(Controller.powerUPpadSize) != 0){
+                                    Brick.bricks.set(Brick.bricks.indexOf(brick), null);
+                                    ballsLeft--;
+                                    if (gameWindow.getChildren().indexOf(Controller.powerUPpadSize) != 0) {
                                         Random rand = new Random();
                                         int lucky = rand.nextInt(11);
                                         Controller.powerMeUp(lucky, gameWindow);
@@ -94,20 +102,20 @@ public class Ball extends Circle {
                                     brick.setFill(Color.RED);
                                     brick.setArcHeight(10);
                                     brick.setArcWidth(10);
-                                } else if(brick.getFill() == Color.RED) {
+                                } else if (brick.getFill() == Color.RED) {
                                     brick.setFill(Color.WHITE);
                                     brick.setArcHeight(20);
                                     brick.setArcWidth(20);
                                 } else {
-                                    Brick.bricks.remove(brick);
-                                    Controller.bricksLeftLabel.setText(String.valueOf(Brick.bricks.size()));
                                     gameWindow.getChildren().removeAll(brick);
+                                    Brick.bricks.set(Brick.bricks.indexOf(brick), null);
+                                    ballsLeft--;
                                 }
                             }
                         }
-                    } catch (ConcurrentModificationException e) {
-//                    e.printStackTrace();
                     }
+                } catch (ConcurrentModificationException e) {
+//                    e.printStackTrace();
                 }
             }
 
