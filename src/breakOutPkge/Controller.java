@@ -15,8 +15,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -37,10 +36,11 @@ public class Controller {
     Label clickToPlayLabel;
     @FXML
     Rectangle startButton;
-
-    static Button easyButton = new Button("Easy");
-    static Button hardButton = new Button("Hard");
+    Paint oldPaddleColor, oldBallColor;
+    static Button easyButton = new Button("[ easy ]");
+    static Button hardButton = new Button("[ hard ]");
     static Label bigLabel = new Label();
+    static Label pauseLabel = new Label("[ paused ]");
     static Button bigButton = new Button();
     static Label score = new Label();
     static Label bricksLeftInfoLabel = new Label("Bricks left:");
@@ -50,6 +50,7 @@ public class Controller {
     public static int lives = 3;
     public static double hVelocity, vVelocity;
     public static Rectangle muteButton = new Rectangle();
+    Rectangle pauseRekt = new Rectangle();
     public static Circle powerUPpadSize = new Circle(40, 490, 15, Color.ALICEBLUE);
     static Image unmuted = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
     static Image muted = new Image("http://lolcipher.com/pix/javafx/muted.png");
@@ -57,14 +58,24 @@ public class Controller {
     static ImagePattern mutedIMG = new ImagePattern(muted);
     public static boolean isPlaying = false;
     public static boolean powerUP = false;
-    static public boolean isMuted = false;
+    public static boolean isMuted = false;
+    public static boolean isPaused = true;
     static Ball2 ball;
     static Paddle gamePaddle;
-    boolean paused = false;
     protected static long startTime;
     protected static long stopTime;
 
     public void setup(){
+        LinearGradient pauseRektGradient = LinearGradient.valueOf("from 100% 0% to 100% 100%, #009FFF  50%,  transparent 100%");
+        pauseRekt.setFill(pauseRektGradient);
+        pauseRekt.setWidth(gameWindow.getWidth());
+        pauseRekt.setHeight(500);
+        pauseLabel.setMinWidth(120);
+        pauseLabel.setLayoutX((gameWindow.getWidth() / 2) - (pauseLabel.getWidth() / 2));
+        pauseLabel.setLayoutY(200);
+        pauseLabel.setTextFill(Color.WHITE);
+        pauseLabel.setStyle("-fx-font-size: 40; -fx-font-weight: bold;");
+
         powerUPpadSize.setOnMousePressed(e -> {
             gamePaddle.setWidth(100);
             gameWindow.getChildren().removeAll(powerUPpadSize);
@@ -72,11 +83,23 @@ public class Controller {
 
         gameWindow.setOnKeyPressed(e -> {
             if(e.getCode() == KeyCode.SPACE) {
-                if (!paused)
+                isPaused = !isPaused;
+                if (isPaused){
+                    oldPaddleColor = gamePaddle.getFill();
+                    oldBallColor = ball.getFill();
+                    gamePaddle.setFill(Color.TRANSPARENT);
+                    ball.setFill(Color.TRANSPARENT);
                     Ball2.animation.pause();
-                else
+                    gameWindow.getChildren().addAll(pauseRekt);
+                    gameWindow.getChildren().addAll(pauseLabel);
+                }
+                else {
+                    gamePaddle.setFill(oldPaddleColor);
+                    ball.setFill(oldBallColor);
+                    gameWindow.getChildren().removeAll(pauseRekt);
+                    gameWindow.getChildren().removeAll(pauseLabel);
                     Ball2.animation.play();
-                paused = !paused;
+                }
             }
         });
 
@@ -103,8 +126,8 @@ public class Controller {
         score.setLayoutY(547);
         score.setStyle("-fx-font-weight: bold; -fx-font-size: 20;");
 
-        bigLabel.setLayoutX(250);
-        bigLabel.setLayoutY(240);
+        bigLabel.setLayoutX(330);
+        bigLabel.setLayoutY(360);
         bigLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 40;");
 
         bigButton.setLayoutX((gameWindow.getWidth() / 2) - (70));
@@ -188,19 +211,20 @@ public class Controller {
     private static void addBricks(Pane gameWindow) {
         gameWindow.getChildren().remove(bigLabel);
         gameWindow.getChildren().remove(bigButton);
-        getBricks(gameWindow, 15, 10);
-        get20percent((levelNumber==2 ? 135 : (levelNumber==3 ? 150 : 150)));
+        getBricks(15, 10);
+        get20percent((levelNumber==2 ? 135 : (levelNumber==3 ? 145 : 120)), 150);
         for(Brick brick : Brick.bricks){
-            gameWindow.getChildren().add(brick);
+            if(brick != null)
+                gameWindow.getChildren().add(brick);
         }
         gameWindow.requestFocus();
         isPlaying = true;
     }
 
-    private static void getBricks(Pane gameWindow, int numRows, int numCols) {
+    private static void getBricks(int numRows, int numCols) {
         for (int column = 0; column < numCols; column++) {
             for (int row = 0; row < numRows; row++) {
-                new Brick(gameWindow, row, column, Controller.levelNumber, 15);
+                new Brick(row, column, Controller.levelNumber);
             }
         }
         Light.Distant light = new Light.Distant();
@@ -219,21 +243,21 @@ public class Controller {
         Ball2.ballsLeft = Brick.bricks.size();
     }
 
-    private static void get20percent(int target){
+    private static void get20percent(int target, int start){
         if(Brick.bricks.size() <= target)
             return;
         else
-            decrease(target, Brick.bricks.size());
+            decrease(target, start);
     }
 
-    private static void decrease(int target, int lvl) {
+    private static void decrease(int target, int current) {
+        System.out.println(current);
         Random rand = new Random();
-        int brickNum = rand.nextInt(Brick.bricks.size());
-        Brick.bricks.remove(brickNum);
-        if(target == (lvl-1))
+        int brickNum = rand.nextInt(current);
+        Brick.bricks.set(brickNum, null);
+        if(current == target+1)
             return;
-        int lvl2 = (lvl-1);
-        decrease(target, lvl2);
+        decrease(target, --current);
     }
 
 

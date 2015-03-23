@@ -22,7 +22,16 @@
                      </stops>
                   </LinearGradient>
                </textFill></Label>
-            <Rectangle fx:id="startButton" arcHeight="40.0" arcWidth="40.0" fill="#1f93ff8e" height="200.0" layoutX="350.0" layoutY="267.0" onMousePressed="#setup" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Rectangle fx:id="startButton" arcHeight="40.0" arcWidth="40.0" height="200.0" layoutX="350.0" layoutY="267.0" onMousePressed="#setup" stroke="BLACK" strokeType="INSIDE" width="200.0">
+               <fill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="0.7674418604651163">
+                     <stops>
+                        <Stop color="#009fff" />
+                        <Stop color="#ffffff00" offset="0.9348659003831418" />
+                        <Stop color="#ffffff00" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill></Rectangle>
             </children></Pane>
         <Label fx:id="scoreLabel" layoutX="35.0" layoutY="550.0" style="-fx-font-size: 14; -fx-font-weight: bold;" text="Balls remaining:" textFill="#666666">
             <font>
