@@ -7,12 +7,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         Scene scene = new Scene(root, 900, 700);
-        scene.getStylesheets().addAll(this.getClass().getResource("lvl1.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("ZepOut");
         primaryStage.setResizable(false);

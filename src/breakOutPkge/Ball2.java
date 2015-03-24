@@ -13,8 +13,8 @@ public class Ball2 extends Circle {
     public final Media BOUNDS_SOUND = new Media(getClass().getResource("plink.mp3").toString());
     public final Media PAD_SOUND = new Media(getClass().getResource("plinklo.mp3").toString());
     public final Media SMASH_SOUND = new Media(getClass().getResource("smash.mp3").toString());
-    double xPos, yPos, speedY, speedX, initialSpeedY;
-    static double radius = 8;
+    double xPos, yPos, speedY, speedX, initialSpeedY, initialSpeedX;
+    static final double RADIUS = 8;
     static int speedRate;
     int updateRemains = 0;
     public static int ballsLeft;
@@ -26,14 +26,15 @@ public class Ball2 extends Circle {
     int xHOR = 0;
     public static Timeline animation = new Timeline();
 
-    public Ball2(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
-        super(startX, startY, radius);
+    public Ball2(Pane gameWindow, double startX, double startY, Paddle gamePaddle) {
+        super(startX, startY, RADIUS);
         this.xPos = startX;
         this.yPos = startY;
         this.speedX = 1;
         this.speedY = 1;
-        this.initialSpeedY = speedY;
-        this.setFill(Color.CADETBLUE);
+        initialSpeedY = 1;
+        initialSpeedX = 1;
+        this.setFill(Color.web("0x009FFF"));
 
         animation = new Timeline(new KeyFrame(Duration.millis(60),
                 e -> ballMovement(gameWindow, gamePaddle)));
@@ -45,10 +46,34 @@ public class Ball2 extends Circle {
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
         if(Controller.isPlaying){
             updateRemains++;
+
             if(updateRemains == 15) {
                 Controller.bricksLeftLabel.setText(String.valueOf(ballsLeft));
                 updateRemains = 0;
             }
+
+            if (Controller.isPaused){
+              //  Controller.oldPaddleColor = gamePaddle.getFill();
+              //  Controller.oldBallColor = Controller.ball.getFill();
+               // gamePaddle.setFill(Color.TRANSPARENT);
+               // Controller.ball.setFill(Color.TRANSPARENT);
+//                initialSpeedY = speedY;
+//                initialSpeedX = speedX;
+                speedY = 0;
+                speedX = 0;
+                Controller.pauseRekt.setVisible(true);
+                Controller.pauseRekt.toFront();
+                Controller.pauseLabel.setVisible(true);
+                Controller.pauseLabel.toFront();
+            } else {
+             //   gamePaddle.setFill(Controller.oldPaddleColor);
+             //   Controller.ball.setFill(Controller.oldBallColor);
+                Controller.pauseRekt.setVisible(false);
+                Controller.pauseLabel.setVisible(false);
+//                speedY = initialSpeedY;
+//                speedX = initialSpeedX;
+            }
+
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY() - speedY);
             double ballPosLEFT = (getCenterX() - getRadius());
@@ -56,11 +81,11 @@ public class Ball2 extends Circle {
             double ballPosTOP = (getCenterY() - getRadius());
             double ballPosDOWN = (getCenterY() + getRadius());
             if(Brick.bricks.size()==0) {
+                System.out.println("OKKOK WONNERED!!!");
                 Controller.stopTime = System.currentTimeMillis();
-                System.out.println((Controller.stopTime-Controller.startTime)/1000);
-                setCenterX(400-getRadius());
+                System.out.println((Controller.stopTime - Controller.startTime) / 1000);
+                setCenterX(400 - getRadius());
                 setCenterY(380);
-                speedY = initialSpeedY;
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
@@ -179,28 +204,24 @@ public class Ball2 extends Circle {
                 else xVERT = 0;
             }
 
-            try {
-                if (yVERT >= 1 && xVERT >= 1) {
-                    if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))) != null) {
-                        noiceMaker(SMASH_SOUND);
-                        gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))));
-                        Brick.bricks.set(((15 * (yVERT - 1)) + (xVERT - 1)), null);
-                        speedY = -speedY;
-                    }
+            if (yVERT >= 1 && xVERT >= 1) {
+                if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))) != null) {
+                    noiceMaker(SMASH_SOUND);
+                    gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))));
+                    Brick.bricks.set(((15 * (yVERT - 1)) + (xVERT - 1)), null);
+                    speedY = -speedY;
                 }
-                if (yHOR >= 1 && xHOR >= 1) {
-                    if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))) != null) {
-                        noiceMaker(SMASH_SOUND);
-                        gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))));
-                        Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
-                        speedX = -speedX;
-                    }
+            }
+            if (yHOR >= 1 && xHOR >= 1) {
+                if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))) != null) {
+                    noiceMaker(SMASH_SOUND);
+                    gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))));
+                    Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
+                    speedX = -speedX;
                 }
-            } catch (IndexOutOfBoundsException e){
-                e.printStackTrace();
             }
 
-            if (((getCenterY() >= 440) && (getCenterY() <= 450))){
+            if (((getCenterY() >= gamePaddle.getY()-getRadius()) && (getCenterY() <= 520))){
                 boolean xx = ((getCenterX() > (gamePaddle.getX() - getRadius())) && (getCenterX() < (gamePaddle.getX() + gamePaddle.getWidth() + getRadius())));
                 boolean yy = ((getCenterY() < gamePaddle.getY() + getRadius() + gamePaddle.getHeight()) && (getCenterY() > gamePaddle.getY() - getRadius()));
                 boolean left = (((gamePaddle.getX() - ballPosRIGHT) <= 1) && ((gamePaddle.getX() - ballPosRIGHT) >= -1));
@@ -217,10 +238,10 @@ public class Ball2 extends Circle {
                 }
             }
 
-            if (ballPosDOWN >= 400 || ballPosLEFT <= 0 || ballPosTOP <= 0 || ballPosRIGHT >= (gameWindow.getWidth())) {
+            if (ballPosDOWN >= 530 || ballPosLEFT <= 0 || ballPosTOP <= 0 || ballPosRIGHT >= (gameWindow.getWidth())) {
                 boolean atRightBorder = ballPosRIGHT >= gameWindow.getWidth();
                 boolean atLeftBorder = ballPosLEFT <= 1;
-                boolean atBottomBorder = getCenterY() > (gamePaddle.getY() + gamePaddle.getHeight() + getRadius());
+                boolean atBottomBorder = getCenterY() > 535;
                 boolean atTopBorder = ballPosTOP <= 1;
                 if (atRightBorder || atLeftBorder) {
                     noiceMaker(BOUNDS_SOUND);
@@ -232,8 +253,9 @@ public class Ball2 extends Circle {
                 }
                 if (atBottomBorder) {
                     if(Controller.lives>1) {
-                        setCenterY(13);
-                        speedY = 1;
+                        Controller.isPaused = true;
+                        setCenterY(450);
+                        speedY = -1;
                         Controller.lives--;
                         Controller.score.setText(String.valueOf(Controller.lives));
                     } else {
