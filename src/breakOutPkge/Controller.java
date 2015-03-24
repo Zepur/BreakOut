@@ -35,6 +35,8 @@ public class Controller {
     Label clickToPlayLabel;
     @FXML
     Rectangle startButton;
+
+    static Random rand = new Random();
     public static Paint oldPaddleColor, oldBallColor;
     static Button easyButton = new Button("[ easy ]");
     static Button hardButton = new Button("[ hard ]");
@@ -77,21 +79,40 @@ public class Controller {
         pauseRekt.setFill(pauseRektGradient);
         pauseRekt.setWidth(gameWindow.getWidth());
         pauseRekt.setHeight(500);
-        pauseRekt.setVisible(false);
 
         pauseLabel.setMinWidth(120);
         pauseLabel.setLayoutX((gameWindow.getWidth() / 2) - (pauseLabel.getWidth() / 2));
         pauseLabel.setLayoutY(200);
         pauseLabel.setTextFill(Color.WHITE);
         pauseLabel.setStyle("-fx-font-size: 40; -fx-font-weight: bold;");
-        pauseLabel.setVisible(false);
 
         powerUPpadSize.setOnMousePressed(e -> {
             gamePaddle.setWidth(100);
             gameWindow.getChildren().removeAll(powerUPpadSize);
         });
 
-        gameWindow.setOnKeyPressed(e -> { if(e.getCode() == KeyCode.SPACE) isPaused = !isPaused; });
+        gameWindow.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.SPACE) {
+                isPaused = !isPaused;
+                if (isPaused){
+                      oldPaddleColor = gamePaddle.getFill();
+                      oldBallColor = ball.getFill();
+                    gamePaddle.setFill(Color.TRANSPARENT);
+                    ball.setFill(Color.TRANSPARENT);
+                    gameWindow.getChildren().addAll(pauseRekt);
+                    gameWindow.getChildren().addAll(pauseLabel);
+                    pauseRekt.toFront();
+                    pauseLabel.toFront();
+                    Ball2.animation.pause();
+                } else {
+                    gamePaddle.setFill(oldPaddleColor);
+                    ball.setFill(oldBallColor);
+                    gameWindow.getChildren().removeAll(pauseRekt);
+                    gameWindow.getChildren().removeAll(pauseLabel);
+                    Ball2.animation.play();
+                }
+            }
+        });
 
         bricksLeftInfoLabel.setLayoutX(35);
         bricksLeftInfoLabel.setLayoutY(580);
@@ -161,13 +182,12 @@ public class Controller {
             startTime = System.currentTimeMillis();
             addBricks(gameWindow);
         });
-        gamePaddle = new Paddle(gameWindow, 70, 20);
+        gamePaddle = new Paddle(70, 20);
+        gameWindow.setOnMouseMoved(e -> gamePaddle.setX((e.getX() - (gamePaddle.getWidth() / 2))));
         gameWindow.getChildren().remove(startButton);
         gameWindow.getChildren().remove(clickToPlayLabel);
         gameWindow.getChildren().remove(clickLabel);
 
-        gameWindow.getChildren().addAll(pauseRekt);
-        gameWindow.getChildren().addAll(pauseLabel);
         gameWindow.setCursor(Cursor.CROSSHAIR);
         gameWindow.getChildren().add(bricksLeftInfoLabel);
         gameWindow.getChildren().add(bricksLeftLabel);
@@ -204,7 +224,7 @@ public class Controller {
         gameWindow.getChildren().add(background);
         background.toBack();
         getBricks(15, 10);
-        get20percent(8, 150);
+        get20percent((levelNumber == 2 ? 135 : (levelNumber == 3 ? 145 : 8)), 150);
         for(Brick brick : Brick.bricks){
             if(brick != null)
                 gameWindow.getChildren().add(brick);
@@ -236,6 +256,16 @@ public class Controller {
     }
 
     private static void get20percent(int target, int start){
+        if(target == start)
+            return;
+
+        int[] bricksToRemove = new int[start-target];
+
+        for(int i = 0; i < bricksToRemove.length; i++){
+            int random = rand.nextInt();
+            bricksToRemove[i] = random;  // <-<-<-<-<-<-<-<-<-<-<-<-<-
+        }
+
         if(Brick.bricks.size() <= target)
             return;
         else
@@ -243,14 +273,19 @@ public class Controller {
     }
 
     private static void decrease(int target, int current) {
-        Random rand = new Random();
-        int brickNum = rand.nextInt(current);
-        Brick.bricks.set(brickNum, null);
-        if(current == target+1)
+        if(current == target)
             return;
+        System.out.println(current);
+        int brickNum = rand.nextInt(current);
+        if(Brick.bricks.get(brickNum) != null) {
+            Brick.bricks.set(brickNum, null);
+        }
+        else {
+            decrease(target, current);
+        }
+
         decrease(target, --current);
     }
-
 
     public static void muteUnmute(){
         isMuted = !isMuted;
@@ -280,10 +315,13 @@ public class Controller {
     public static void betweenLVLs(Pane gameWindow) {
         bigLabel.setText("You beat lvl: " + levelNumber + "!\n");
         bigLabel.setTextFill(Color.GREENYELLOW);
-        bigButton.setText("Start lvl: "+(levelNumber+1));
+        bigButton.setText("Start lvl: " + (levelNumber + 1));
         bigButton.setStyle("-fx-background-color: blue; -fx-font-size: 30; -fx-font-weight:bold;");
         gameWindow.getChildren().removeAll(Brick.bricks);
-        bigButton.setOnAction(e -> { levelNumber++; addBricks(gameWindow); });
+        bigButton.setOnAction(e -> {
+            levelNumber++;
+            addBricks(gameWindow);
+        });
         gameWindow.getChildren().add(bigButton);
         gameWindow.getChildren().add(bigLabel);
     }
@@ -295,6 +333,8 @@ public class Controller {
         bigButton.setText("Retry");
         gameWindow.getChildren().removeAll(Brick.bricks);
         bigButton.setOnAction(e -> {
+            gameWindow.getChildren().removeAll(bigLabel);
+            gameWindow.getChildren().removeAll(bigButton);
             Brick.bricks = new ArrayList<>();
             levelNumber = 1;
             lives=3;

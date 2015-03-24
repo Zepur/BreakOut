@@ -30,8 +30,8 @@ public class Ball2 extends Circle {
         super(startX, startY, RADIUS);
         this.xPos = startX;
         this.yPos = startY;
-        this.speedX = 1;
-        this.speedY = 1;
+        this.speedX = 1.1;
+        this.speedY = 1.3;
         initialSpeedY = 1;
         initialSpeedX = 1;
         this.setFill(Color.web("0x009FFF"));
@@ -52,34 +52,13 @@ public class Ball2 extends Circle {
                 updateRemains = 0;
             }
 
-            if (Controller.isPaused){
-              //  Controller.oldPaddleColor = gamePaddle.getFill();
-              //  Controller.oldBallColor = Controller.ball.getFill();
-               // gamePaddle.setFill(Color.TRANSPARENT);
-               // Controller.ball.setFill(Color.TRANSPARENT);
-//                initialSpeedY = speedY;
-//                initialSpeedX = speedX;
-                speedY = 0;
-                speedX = 0;
-                Controller.pauseRekt.setVisible(true);
-                Controller.pauseRekt.toFront();
-                Controller.pauseLabel.setVisible(true);
-                Controller.pauseLabel.toFront();
-            } else {
-             //   gamePaddle.setFill(Controller.oldPaddleColor);
-             //   Controller.ball.setFill(Controller.oldBallColor);
-                Controller.pauseRekt.setVisible(false);
-                Controller.pauseLabel.setVisible(false);
-//                speedY = initialSpeedY;
-//                speedX = initialSpeedX;
-            }
-
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY() - speedY);
             double ballPosLEFT = (getCenterX() - getRadius());
             double ballPosRIGHT = (getCenterX() + getRadius());
             double ballPosTOP = (getCenterY() - getRadius());
             double ballPosDOWN = (getCenterY() + getRadius());
+
             if(Brick.bricks.size()==0) {
                 System.out.println("OKKOK WONNERED!!!");
                 Controller.stopTime = System.currentTimeMillis();
@@ -121,7 +100,6 @@ public class Ball2 extends Circle {
                     yVERT = 10;
                 else
                     yVERT = 0;
-
 
 
                 if      (((getCenterY()+getRadius() >= gridY[0] + 8)) && ((getCenterY() + getRadius() <= gridY[0] + 8 + Brick.BRICK_HEIGHT))) yHOR = 1;
@@ -186,21 +164,21 @@ public class Ball2 extends Circle {
                     xHOR = 0;
 
 
-                if      (((getCenterX() - getRadius() >= gridX[0] - 8)) && ((getCenterX() + getRadius() <= gridX[0] + 8 + Brick.BRICK_WIDTH)))  xVERT = 1;
-                else if (((getCenterX() - getRadius() >= gridX[1] - 8)) && ((getCenterX() + getRadius() <= gridX[1] + 8 + Brick.BRICK_WIDTH)))  xVERT = 2;
-                else if (((getCenterX() - getRadius() >= gridX[2] - 8)) && ((getCenterX() + getRadius() <= gridX[2] + 8 + Brick.BRICK_WIDTH)))  xVERT = 3;
-                else if (((getCenterX() - getRadius() >= gridX[3] - 8)) && ((getCenterX() + getRadius() <= gridX[3] + 8 + Brick.BRICK_WIDTH)))  xVERT = 4;
-                else if (((getCenterX() - getRadius() >= gridX[4] - 8)) && ((getCenterX() + getRadius() <= gridX[4] + 8 + Brick.BRICK_WIDTH)))  xVERT = 5;
-                else if (((getCenterX() - getRadius() >= gridX[5] - 8)) && ((getCenterX() + getRadius() <= gridX[5] + 8 + Brick.BRICK_WIDTH)))  xVERT = 6;
-                else if (((getCenterX() - getRadius() >= gridX[6] - 8)) && ((getCenterX() + getRadius() <= gridX[6] + 8 + Brick.BRICK_WIDTH)))  xVERT = 7;
-                else if (((getCenterX() - getRadius() >= gridX[7] - 8)) && ((getCenterX() + getRadius() <= gridX[7] + 8 + Brick.BRICK_WIDTH)))  xVERT = 8;
-                else if (((getCenterX() - getRadius() >= gridX[8] - 8)) && ((getCenterX() + getRadius() <= gridX[8] + 8 + Brick.BRICK_WIDTH)))  xVERT = 9;
-                else if (((getCenterX() - getRadius() >= gridX[9] - 8)) && ((getCenterX() + getRadius() <= gridX[9] + 8 + Brick.BRICK_WIDTH)))  xVERT = 10;
-                else if (((getCenterX() - getRadius() >= gridX[10] - 8)) && ((getCenterX() + getRadius() <= gridX[10] + 8 + Brick.BRICK_WIDTH))) xVERT = 11;
-                else if (((getCenterX() - getRadius() >= gridX[11] - 8)) && ((getCenterX() + getRadius() <= gridX[11] + 8 + Brick.BRICK_WIDTH))) xVERT = 12;
-                else if (((getCenterX() - getRadius() >= gridX[12] - 8)) && ((getCenterX() + getRadius() <= gridX[12] + 8 + Brick.BRICK_WIDTH))) xVERT = 13;
-                else if (((getCenterX() - getRadius() >= gridX[13] - 8)) && ((getCenterX() + getRadius() <= gridX[13] + 8 + Brick.BRICK_WIDTH))) xVERT = 14;
-                else if (((getCenterX() - getRadius() >= gridX[14] - 8)) && ((getCenterX() + getRadius() <= gridX[14] + 8 + Brick.BRICK_WIDTH))) xVERT = 15;
+                if      (((getCenterX() >= gridX[0])) && ((getCenterX() <= gridX[0] + Brick.BRICK_WIDTH)))  xVERT = 1;
+                else if (((getCenterX() >= gridX[1])) && ((getCenterX() <= gridX[1] + Brick.BRICK_WIDTH)))  xVERT = 2;
+                else if (((getCenterX() >= gridX[2])) && ((getCenterX() <= gridX[2] + Brick.BRICK_WIDTH)))  xVERT = 3;
+                else if (((getCenterX() >= gridX[3])) && ((getCenterX() <= gridX[3] + Brick.BRICK_WIDTH)))  xVERT = 4;
+                else if (((getCenterX() >= gridX[4])) && ((getCenterX() <= gridX[4] + Brick.BRICK_WIDTH)))  xVERT = 5;
+                else if (((getCenterX() >= gridX[5])) && ((getCenterX() <= gridX[5] + Brick.BRICK_WIDTH)))  xVERT = 6;
+                else if (((getCenterX() >= gridX[6])) && ((getCenterX() <= gridX[6] + Brick.BRICK_WIDTH)))  xVERT = 7;
+                else if (((getCenterX() >= gridX[7])) && ((getCenterX() <= gridX[7] + Brick.BRICK_WIDTH)))  xVERT = 8;
+                else if (((getCenterX() >= gridX[8])) && ((getCenterX() <= gridX[8] + Brick.BRICK_WIDTH)))  xVERT = 9;
+                else if (((getCenterX() >= gridX[9])) && ((getCenterX() <= gridX[9] + Brick.BRICK_WIDTH)))  xVERT = 10;
+                else if (((getCenterX() >= gridX[10])) && ((getCenterX() <= gridX[10] + Brick.BRICK_WIDTH))) xVERT = 11;
+                else if (((getCenterX() >= gridX[11])) && ((getCenterX() <= gridX[11] + Brick.BRICK_WIDTH))) xVERT = 12;
+                else if (((getCenterX() >= gridX[12])) && ((getCenterX() <= gridX[12] + Brick.BRICK_WIDTH))) xVERT = 13;
+                else if (((getCenterX() >= gridX[13])) && ((getCenterX() <= gridX[13] + Brick.BRICK_WIDTH))) xVERT = 14;
+                else if (((getCenterX() >= gridX[14])) && ((getCenterX() <= gridX[14] + Brick.BRICK_WIDTH))) xVERT = 15;
                 else xVERT = 0;
             }
 
@@ -212,6 +190,7 @@ public class Ball2 extends Circle {
                     speedY = -speedY;
                 }
             }
+
             if (yHOR >= 1 && xHOR >= 1) {
                 if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))) != null) {
                     noiceMaker(SMASH_SOUND);
@@ -226,13 +205,12 @@ public class Ball2 extends Circle {
                 boolean yy = ((getCenterY() < gamePaddle.getY() + getRadius() + gamePaddle.getHeight()) && (getCenterY() > gamePaddle.getY() - getRadius()));
                 boolean left = (((gamePaddle.getX() - ballPosRIGHT) <= 1) && ((gamePaddle.getX() - ballPosRIGHT) >= -1));
                 boolean right = (((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getX())) <= 1) && ((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getX())) >= -1));
-                boolean bottom = (((getCenterY() - (gamePaddle.getY() + gamePaddle.getHeight() + getRadius())) <= 1) && ((getCenterY() - (gamePaddle.getY() + gamePaddle.getHeight() + getRadius())) >= -1));
-                boolean top = (ballPosDOWN == gamePaddle.getY());
+                boolean top = (ballPosDOWN >= gamePaddle.getY());
                 if (((right && (speedX < 0)) || (left && (speedX > 0))) && yy) {
                     noiceMaker(PAD_SOUND);
                     speedX = -speedX;
                 }
-                if (xx && ((top && (speedY < 0)) || (bottom && (speedY > 0)))) {
+                if (xx && (top && (speedY < 0))) {
                     noiceMaker(PAD_SOUND);
                     speedY = -speedY;
                 }
@@ -241,7 +219,7 @@ public class Ball2 extends Circle {
             if (ballPosDOWN >= 530 || ballPosLEFT <= 0 || ballPosTOP <= 0 || ballPosRIGHT >= (gameWindow.getWidth())) {
                 boolean atRightBorder = ballPosRIGHT >= gameWindow.getWidth();
                 boolean atLeftBorder = ballPosLEFT <= 1;
-                boolean atBottomBorder = getCenterY() > 535;
+                boolean atBottomBorder = getCenterY() > 555;
                 boolean atTopBorder = ballPosTOP <= 1;
                 if (atRightBorder || atLeftBorder) {
                     noiceMaker(BOUNDS_SOUND);
