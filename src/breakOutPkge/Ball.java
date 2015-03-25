@@ -47,6 +47,7 @@ public class Ball extends Circle {
                 Controller.bricksLeftLabel.setText(String.valueOf(ballsLeft));
                 updateRemains = 0;
             }
+
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY()-speedY);
             double ballPosLEFT = (getCenterX() - getRadius());
@@ -54,14 +55,17 @@ public class Ball extends Circle {
             double ballPosTOP = (getCenterY() - getRadius());
             double ballPosDOWN = (getCenterY() + getRadius());
             if(Brick.bricks.size()==0) {
-                Controller.stopTime = System.currentTimeMillis();
-                System.out.println((Controller.stopTime-Controller.startTime)/1000);
+
                 setCenterX(400-getRadius());
                 setCenterY(380);
                 speedY = initialSpeedY;
                 Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
             } else {
+
+                Controller.stopTime = System.currentTimeMillis();
+                System.out.println((Controller.stopTime-Controller.startTime)/1000);
+
                 try {
                     for (Brick brick : Brick.bricks) {
                         if (brick != null) {
@@ -154,13 +158,13 @@ public class Ball extends Circle {
                         setCenterY(13);
                         speedY = 1;
                         Controller.lives--;
-                        Controller.score.setText(String.valueOf(Controller.lives));
+                        Controller.ballsRemainginLabel.setText(String.valueOf(Controller.lives));
                     } else {
                         setCenterY(380);
                         setCenterX(400 - getRadius());
                         speedY = -speedY;
                         Controller.lives--;
-                        Controller.score.setText(String.valueOf(Controller.lives));
+                        Controller.ballsRemainginLabel.setText(String.valueOf(Controller.lives));
                         Controller.isPlaying = false;
                         Controller.endGame(gameWindow);
                     }

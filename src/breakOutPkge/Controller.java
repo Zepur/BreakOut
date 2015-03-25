@@ -42,7 +42,7 @@ public class Controller {
 
     static Image unmuted                = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
     static Image muted                  = new Image("http://lolcipher.com/pix/javafx/muted.png");
-    static Image back1                  = new Image("http://lolcipher.com/pix/javafx/backjack.jpg");
+    static Image back1                  = new Image("http://lolcipher.com/pix/javafx/backjack.jpg"); // http://www.lolcipher.com/pix/javafx/2mas.jpg");
     static Image back2                  = new Image("http://lolcipher.com/pix/javafx/backsolar.jpg");
     static Image back3                  = new Image("http://lolcipher.com/pix/javafx/backnorge.jpg");
     static Image muteGuide              = new Image("http://lolcipher.com/pix/javafx/muteGuide.png");
@@ -60,11 +60,12 @@ public class Controller {
     static Button bigButton             = new Button();
     static Label bigLabel               = new Label();
     static Label pauseLabel             = new Label("[ paused ]");
-    static Label score                  = new Label();
-    static Label scoreLabel             = new Label("balls remaining:");
+    static Label ballsRemainingInfoLabel= new Label("balls remaining:");
+    static Label ballsRemainginLabel    = new Label();
     static Label bricksLeftInfoLabel    = new Label("bricks remaining:");
-    static Label timeElapsed            = new Label("time:");
     static Label bricksLeftLabel        = new Label("150");
+    static Label timeElapsedInfoLabel   = new Label("time:");
+    static Label timeElapsedLabel       = new Label("0.0");
     public static Rectangle muteButton  = new Rectangle();
     public static Rectangle pauseRect   = new Rectangle();
     public static Circle powerUPpadSize = new Circle(40, 490, 15, Color.ALICEBLUE);
@@ -79,16 +80,16 @@ public class Controller {
     static Paddle gamePaddle;
 
     public void setup(){
-        scoreLabel.setLayoutX(30);
-        scoreLabel.setLayoutY(635);
-        scoreLabel.setTextFill(Color.DEEPSKYBLUE);
-        scoreLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+        ballsRemainingInfoLabel.setLayoutX(30);
+        ballsRemainingInfoLabel.setLayoutY(635);
+        ballsRemainingInfoLabel.setTextFill(Color.DEEPSKYBLUE);
+        ballsRemainingInfoLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
-        score.setText(String.valueOf(lives));
-        score.setLayoutX(148);
-        score.setLayoutY(633);
-        score.setTextFill(Color.WHITE);
-        score.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
+        ballsRemainginLabel.setText(String.valueOf(lives));
+        ballsRemainginLabel.setLayoutX(148);
+        ballsRemainginLabel.setLayoutY(633);
+        ballsRemainginLabel.setTextFill(Color.WHITE);
+        ballsRemainginLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
 
         bricksLeftInfoLabel.setLayoutX(30);
         bricksLeftInfoLabel.setLayoutY(675);
@@ -100,9 +101,15 @@ public class Controller {
         bricksLeftLabel.setTextFill(Color.WHITE);
         bricksLeftLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
 
-        timeElapsed.setLayoutX(30);
-        timeElapsed.setLayoutY(570);
-        timeElapsed.setTextFill(Color.DEEPSKYBLUE);
+        timeElapsedInfoLabel.setLayoutX(30);
+        timeElapsedInfoLabel.setLayoutY(570);
+        timeElapsedInfoLabel.setTextFill(Color.DEEPSKYBLUE);
+        timeElapsedInfoLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+
+        timeElapsedLabel.setLayoutY(570);
+        timeElapsedLabel.setLayoutX(70);
+        timeElapsedLabel.setTextFill(Color.WHITE);
+        timeElapsedLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
 
         LinearGradient pauseRectGradient = LinearGradient.valueOf("from 100% 0% to 100% 100%, #009FFF 50%, transparent 100%");
         pauseRect.setFill(pauseRectGradient);
@@ -186,8 +193,10 @@ public class Controller {
         gameWindow.setCursor(Cursor.CROSSHAIR);
         gameWindow.getChildren().add(bricksLeftInfoLabel);
         gameWindow.getChildren().add(bricksLeftLabel);
-        gameWindow.getChildren().add(score);
-        gameWindow.getChildren().add(scoreLabel);
+        gameWindow.getChildren().add(timeElapsedInfoLabel);
+        gameWindow.getChildren().add(timeElapsedLabel);
+        gameWindow.getChildren().add(ballsRemainginLabel);
+        gameWindow.getChildren().add(ballsRemainingInfoLabel);
         gameWindow.getChildren().add(gamePaddle);
         gameWindow.getChildren().add(muteButton);
         gameWindow.getChildren().add(bigLabel);
@@ -247,6 +256,9 @@ public class Controller {
         Brick.bricks = new ArrayList<>();
         background = new ImageView((levelNumber == 3 ? back3 : (levelNumber == 2 ? back2 : back1)));
         gameWindow.getChildren().add(background);
+        background.setRotate(-90);
+        background.setLayoutY(0);
+        background.setLayoutX(-455);
         background.toBack();
         getBricks(15, 10);
         reduceNumberOfBlocks((levelNumber == 3 ? 150 : (levelNumber == 2 ? 140 : 120)), 150);
@@ -261,7 +273,9 @@ public class Controller {
     private static void getBricks(int numRows, int numCols) {
         for (int column = 0; column < numCols; column++) {
             for (int row = 0; row < numRows; row++) {
-                new Brick(row, column, Controller.levelNumber);
+                Brick newBrick = new Brick(row, column, Controller.levelNumber);
+                newBrick.setLayoutX(60 + (row * 50) + (3 * row));
+                newBrick.setLayoutY(50 + (column * 20) + (3 * column));
             }
         }
         Light.Distant light = new Light.Distant();
@@ -335,6 +349,8 @@ public class Controller {
     }
 
     public static void endGame(Pane gameWindow){
+        gameWindow.getChildren().removeAll(bigLabel);
+        gameWindow.getChildren().removeAll(bigButton);
         bigLabel.setText("Game over @ lvl: " + levelNumber + "!");
         bigLabel.setTextFill(Color.TOMATO);
         bigButton.setText("Retry");
@@ -346,7 +362,7 @@ public class Controller {
             Brick.bricks = new ArrayList<>();
             levelNumber = 1;
             lives = 3;
-            score.setText(String.valueOf(lives));
+            ballsRemainginLabel.setText(String.valueOf(lives));
             startNewGame(gameWindow);
         });
         gameWindow.getChildren().add(bigButton);
