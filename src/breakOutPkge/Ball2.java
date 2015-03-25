@@ -17,7 +17,7 @@ public class Ball2 extends Circle {
     static final double RADIUS = 8;
     static int speedRate;
     int updateRemains = 0;
-    public static int ballsLeft;
+    public static int bricksLeft;
     int[] gridX = {60, 113, 166, 219, 272, 325, 378, 431, 484, 537, 590, 643, 696, 749, 802};
     int[] gridY = {50, 73, 96, 119, 142, 165, 188, 211, 234, 257};
     int yVERT = 0;
@@ -48,71 +48,72 @@ public class Ball2 extends Circle {
             updateRemains++;
 
             if(updateRemains == 15) {
-                Controller.bricksLeftLabel.setText(String.valueOf(ballsLeft));
+                Controller.bricksLeftLabel.setText(String.valueOf(bricksLeft));
                 updateRemains = 0;
             }
 
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY() - speedY);
-            double ballPosLEFT = (getCenterX() - getRadius());
+            double ballPosLEFT  = (getCenterX() - getRadius());
             double ballPosRIGHT = (getCenterX() + getRadius());
-            double ballPosTOP = (getCenterY() - getRadius());
-            double ballPosDOWN = (getCenterY() + getRadius());
+            double ballPosTOP   = (getCenterY() - getRadius());
+            double ballPosDOWN  = (getCenterY() + getRadius());
 
-            if(Brick.bricks.size()==0) {
-                System.out.println("OKKOK WONNERED!!!");
+            if(bricksLeft == 0) {
+                Controller.bricksLeftLabel.setText("0");
                 Controller.stopTime = System.currentTimeMillis();
-                System.out.println((Controller.stopTime - Controller.startTime) / 1000);
+                System.out.println("time used: " +(Controller.stopTime - Controller.startTime) / 1000);
                 setCenterX(400 - getRadius());
                 setCenterY(380);
-                Controller.betweenLVLs(gameWindow);
                 Controller.isPlaying = false;
+                Controller.betweenLVLs(gameWindow);
             } else {
+                System.out.println(yVERT);
                 if        (((getCenterY() + getRadius() >= gridY[0])  && (getCenterY() + getRadius() <= gridY[0] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[0])  && (getCenterY() - getRadius() <= gridY[0] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                        || ((getCenterY() - getRadius() <= gridY[0])  && (getCenterY() - getRadius() <= gridY[0] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 1;
-                else if   (((getCenterY() + getRadius() >= gridY[1])  && (getCenterY() + getRadius() <= gridY[1] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[1])  && (getCenterY() - getRadius() <= gridY[1] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[1])  && (getCenterY() + getRadius() <= gridY[1] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[1])  && (getCenterY() - getRadius() <= gridY[1] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 2;
-                else if   (((getCenterY() + getRadius() >= gridY[2])  && (getCenterY() + getRadius() <= gridY[2] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[2])  && (getCenterY() - getRadius() <= gridY[2] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[2])  && (getCenterY() + getRadius() <= gridY[2] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[2])  && (getCenterY() - getRadius() <= gridY[2] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 3;
-                else if   (((getCenterY() + getRadius() >= gridY[3])  && (getCenterY() + getRadius() <= gridY[3] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[3])  && (getCenterY() - getRadius() <= gridY[3] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[3])  && (getCenterY() + getRadius() <= gridY[3] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[3])  && (getCenterY() - getRadius() <= gridY[3] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 4;
-                else if   (((getCenterY() + getRadius() >= gridY[4])  && (getCenterY() + getRadius() <= gridY[4] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[4])  && (getCenterY() - getRadius() <= gridY[4] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[4])  && (getCenterY() + getRadius() <= gridY[4] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[4])  && (getCenterY() - getRadius() <= gridY[4] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 5;
-                else if   (((getCenterY() + getRadius() >= gridY[5])  && (getCenterY() + getRadius() <= gridY[5] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[5])  && (getCenterY() - getRadius() <= gridY[5] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[5])  && (getCenterY() + getRadius() <= gridY[5] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[5])  && (getCenterY() - getRadius() <= gridY[5] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 6;
-                else if   (((getCenterY() + getRadius() >= gridY[6])  && (getCenterY() + getRadius() <= gridY[6] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[6])  && (getCenterY() - getRadius() <= gridY[6] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[6])  && (getCenterY() + getRadius() <= gridY[6] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[6])  && (getCenterY() - getRadius() <= gridY[6] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 7;
-                else if   (((getCenterY() + getRadius() >= gridY[7])  && (getCenterY() + getRadius() <= gridY[7] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[7])  && (getCenterY() - getRadius() <= gridY[7] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[7])  && (getCenterY() + getRadius() <= gridY[7] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[7])  && (getCenterY() - getRadius() <= gridY[7] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 8;
-                else if   (((getCenterY() + getRadius() >= gridY[8])  && (getCenterY() + getRadius() <= gridY[8] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[8])  && (getCenterY() - getRadius() <= gridY[8] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[8])  && (getCenterY() + getRadius() <= gridY[8] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[8])  && (getCenterY() - getRadius() <= gridY[8] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 9;
-                else if   (((getCenterY() + getRadius() >= gridY[9])  && (getCenterY() + getRadius() <= gridY[9] + Brick.BRICK_HEIGHT) && (speedY < 0))
-                        || ((getCenterY() - getRadius() >= gridY[9])  && (getCenterY() - getRadius() <= gridY[9] + Brick.BRICK_HEIGHT) && (speedY > 0)))
+                if   (((getCenterY() + getRadius() >= gridY[9])  && (getCenterY() + getRadius() <= gridY[9] + Brick.BRICK_HEIGHT) && (speedY < 0))
+                        || ((getCenterY() - getRadius() <= gridY[9])  && (getCenterY() - getRadius() <= gridY[9] + Brick.BRICK_HEIGHT) && (speedY > 0)))
                     yVERT = 10;
-                else
+                if(((getCenterY() + getRadius()) < gridY[0]) || ((getCenterY() - getRadius()) > (gridY[9] + Brick.BRICK_HEIGHT)))
                     yVERT = 0;
 
 
-                if      (((getCenterY()+getRadius() >= gridY[0] + 8)) && ((getCenterY() + getRadius() <= gridY[0] + 8 + Brick.BRICK_HEIGHT))) yHOR = 1;
-                else if (((getCenterY()+getRadius() >= gridY[1] + 8)) && ((getCenterY() + getRadius() <= gridY[1] + 8 + Brick.BRICK_HEIGHT))) yHOR = 2;
-                else if (((getCenterY()+getRadius() >= gridY[2] + 8)) && ((getCenterY() + getRadius() <= gridY[2] + 8 + Brick.BRICK_HEIGHT))) yHOR = 3;
-                else if (((getCenterY()+getRadius() >= gridY[3] + 8)) && ((getCenterY() + getRadius() <= gridY[3] + 8 + Brick.BRICK_HEIGHT))) yHOR = 4;
-                else if (((getCenterY()+getRadius() >= gridY[4] + 8)) && ((getCenterY() + getRadius() <= gridY[4] + 8 + Brick.BRICK_HEIGHT))) yHOR = 5;
-                else if (((getCenterY()+getRadius() >= gridY[5] + 8)) && ((getCenterY() + getRadius() <= gridY[5] + 8 + Brick.BRICK_HEIGHT))) yHOR = 6;
-                else if (((getCenterY()+getRadius() >= gridY[6] + 8)) && ((getCenterY() + getRadius() <= gridY[6] + 8 + Brick.BRICK_HEIGHT))) yHOR = 7;
-                else if (((getCenterY()+getRadius() >= gridY[7] + 8)) && ((getCenterY() + getRadius() <= gridY[7] + 8 + Brick.BRICK_HEIGHT))) yHOR = 8;
-                else if (((getCenterY()+getRadius() >= gridY[8] + 8)) && ((getCenterY() + getRadius() <= gridY[8] + 8 + Brick.BRICK_HEIGHT))) yHOR = 9;
-                else if (((getCenterY()+getRadius() >= gridY[9] + 8)) && ((getCenterY() + getRadius() <= gridY[9] + 8 + Brick.BRICK_HEIGHT))) yHOR = 10;
-                else yHOR = 0;
+                if (((getCenterY() >= gridY[0])) && ((getCenterY() <= gridY[0] + Brick.BRICK_HEIGHT))) yHOR = 1;
+                if (((getCenterY() >= gridY[1])) && ((getCenterY() <= gridY[1] + Brick.BRICK_HEIGHT))) yHOR = 2;
+                if (((getCenterY() >= gridY[2])) && ((getCenterY() <= gridY[2] + Brick.BRICK_HEIGHT))) yHOR = 3;
+                if (((getCenterY() >= gridY[3])) && ((getCenterY() <= gridY[3] + Brick.BRICK_HEIGHT))) yHOR = 4;
+                if (((getCenterY() >= gridY[4])) && ((getCenterY() <= gridY[4] + Brick.BRICK_HEIGHT))) yHOR = 5;
+                if (((getCenterY() >= gridY[5])) && ((getCenterY() <= gridY[5] + Brick.BRICK_HEIGHT))) yHOR = 6;
+                if (((getCenterY() >= gridY[6])) && ((getCenterY() <= gridY[6] + Brick.BRICK_HEIGHT))) yHOR = 7;
+                if (((getCenterY() >= gridY[7])) && ((getCenterY() <= gridY[7] + Brick.BRICK_HEIGHT))) yHOR = 8;
+                if (((getCenterY() >= gridY[8])) && ((getCenterY() <= gridY[8] + Brick.BRICK_HEIGHT))) yHOR = 9;
+                if (((getCenterY() >= gridY[9])) && ((getCenterY() <= gridY[9] + Brick.BRICK_HEIGHT))) yHOR = 10;
+                if (((getCenterY() < gridY[0])) || ((getCenterY() > gridY[9]))) yHOR = 0;
 
 
                 if        (((getCenterX() + getRadius() >= gridX[0])  && (getCenterX() + getRadius() <= gridX[0] + Brick.BRICK_WIDTH) && (speedX > 0))
@@ -164,16 +165,16 @@ public class Ball2 extends Circle {
                     xHOR = 0;
 
 
-                if      (((getCenterX() >= gridX[0])) && ((getCenterX() <= gridX[0] + Brick.BRICK_WIDTH)))  xVERT = 1;
-                else if (((getCenterX() >= gridX[1])) && ((getCenterX() <= gridX[1] + Brick.BRICK_WIDTH)))  xVERT = 2;
-                else if (((getCenterX() >= gridX[2])) && ((getCenterX() <= gridX[2] + Brick.BRICK_WIDTH)))  xVERT = 3;
-                else if (((getCenterX() >= gridX[3])) && ((getCenterX() <= gridX[3] + Brick.BRICK_WIDTH)))  xVERT = 4;
-                else if (((getCenterX() >= gridX[4])) && ((getCenterX() <= gridX[4] + Brick.BRICK_WIDTH)))  xVERT = 5;
-                else if (((getCenterX() >= gridX[5])) && ((getCenterX() <= gridX[5] + Brick.BRICK_WIDTH)))  xVERT = 6;
-                else if (((getCenterX() >= gridX[6])) && ((getCenterX() <= gridX[6] + Brick.BRICK_WIDTH)))  xVERT = 7;
-                else if (((getCenterX() >= gridX[7])) && ((getCenterX() <= gridX[7] + Brick.BRICK_WIDTH)))  xVERT = 8;
-                else if (((getCenterX() >= gridX[8])) && ((getCenterX() <= gridX[8] + Brick.BRICK_WIDTH)))  xVERT = 9;
-                else if (((getCenterX() >= gridX[9])) && ((getCenterX() <= gridX[9] + Brick.BRICK_WIDTH)))  xVERT = 10;
+                if      (((getCenterX() >= gridX[0]))  && ((getCenterX() <= gridX[0]  + Brick.BRICK_WIDTH))) xVERT = 1;
+                else if (((getCenterX() >= gridX[1]))  && ((getCenterX() <= gridX[1]  + Brick.BRICK_WIDTH))) xVERT = 2;
+                else if (((getCenterX() >= gridX[2]))  && ((getCenterX() <= gridX[2]  + Brick.BRICK_WIDTH))) xVERT = 3;
+                else if (((getCenterX() >= gridX[3]))  && ((getCenterX() <= gridX[3]  + Brick.BRICK_WIDTH))) xVERT = 4;
+                else if (((getCenterX() >= gridX[4]))  && ((getCenterX() <= gridX[4]  + Brick.BRICK_WIDTH))) xVERT = 5;
+                else if (((getCenterX() >= gridX[5]))  && ((getCenterX() <= gridX[5]  + Brick.BRICK_WIDTH))) xVERT = 6;
+                else if (((getCenterX() >= gridX[6]))  && ((getCenterX() <= gridX[6]  + Brick.BRICK_WIDTH))) xVERT = 7;
+                else if (((getCenterX() >= gridX[7]))  && ((getCenterX() <= gridX[7]  + Brick.BRICK_WIDTH))) xVERT = 8;
+                else if (((getCenterX() >= gridX[8]))  && ((getCenterX() <= gridX[8]  + Brick.BRICK_WIDTH))) xVERT = 9;
+                else if (((getCenterX() >= gridX[9]))  && ((getCenterX() <= gridX[9]  + Brick.BRICK_WIDTH))) xVERT = 10;
                 else if (((getCenterX() >= gridX[10])) && ((getCenterX() <= gridX[10] + Brick.BRICK_WIDTH))) xVERT = 11;
                 else if (((getCenterX() >= gridX[11])) && ((getCenterX() <= gridX[11] + Brick.BRICK_WIDTH))) xVERT = 12;
                 else if (((getCenterX() >= gridX[12])) && ((getCenterX() <= gridX[12] + Brick.BRICK_WIDTH))) xVERT = 13;
@@ -187,6 +188,7 @@ public class Ball2 extends Circle {
                     noiceMaker(SMASH_SOUND);
                     gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))));
                     Brick.bricks.set(((15 * (yVERT - 1)) + (xVERT - 1)), null);
+                    bricksLeft--;
                     speedY = -speedY;
                 }
             }
@@ -196,6 +198,7 @@ public class Ball2 extends Circle {
                     noiceMaker(SMASH_SOUND);
                     gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))));
                     Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
+                    bricksLeft--;
                     speedX = -speedX;
                 }
             }
@@ -233,7 +236,7 @@ public class Ball2 extends Circle {
                     if(Controller.lives>1) {
                         Controller.isPaused = true;
                         setCenterY(450);
-                        speedY = -1;
+                        speedY = 1;
                         Controller.lives--;
                         Controller.score.setText(String.valueOf(Controller.lives));
                     } else {

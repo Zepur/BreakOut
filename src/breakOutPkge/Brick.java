@@ -92,14 +92,14 @@ public class Brick extends Rectangle {
                         ((row == 4 || row == 10) && (column == 1 || column == 3 || column == 4 || column == 5 || column == 6 || column == 7 || column == 8)) ||
                         ((row == 5 || row == 9) && (column == 2 || column == 3 || column == 5 || column == 6)) ||
                         ((row == 6 || row == 7 || row == 8) && (column == 3 || column == 4 || column == 5 || column == 6))) {
-                    setFill(Color.RED);
+                    setFill(Color.SKYBLUE);
                     setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                     setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
                      setArcHeight(10);
                      setArcWidth(10);
                     bricks.add(this);
                 } else {
-                    setFill(Color.WHITE);
+                    setFill(Color.ROSYBROWN);
                     setLayoutX(startPosX + (row * BRICK_WIDTH) + (hGap * row));
                     setLayoutY(BRICK_WIDTH + (column * BRICK_HEIGHT) + (vGap * column));
                      setArcHeight(20);
