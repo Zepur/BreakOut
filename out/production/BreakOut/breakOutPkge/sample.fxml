@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
+<?import java.lang.*?>
 <?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="playWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="breakOutPkge.Controller">
@@ -25,20 +23,36 @@
                      </stops>
                   </LinearGradient>
                </textFill></Label>
-            <Rectangle fx:id="startButton" arcHeight="40.0" arcWidth="40.0" height="200.0" layoutX="350.0" layoutY="293.0" onMousePressed="#setup" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0">
+            <Rectangle fx:id="startEasyButton" arcHeight="40.0" arcWidth="40.0" height="200.0" layoutX="174.0" layoutY="310.0" onMousePressed="#startEasy" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0">
                <fill>
-                  <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-50.91" focusDistance="0.37209302325581417" radius="0.5465116279069768">
+                  <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-50.91" focusDistance="0.488372093023256" radius="0.5">
                      <stops>
                         <Stop color="WHITE" />
                         <Stop color="WHITE" offset="0.007662835249042145" />
-                        <Stop color="#009fff" offset="0.4674329501915709" />
-                        <Stop color="#ffffff00" offset="0.9003831417624519" />
+                        <Stop color="#18ff00" offset="0.4674329501915709" />
+                        <Stop color="#77ff292d" offset="0.9003831417624517" />
+                        <Stop color="#1eff0000" offset="0.946360153256705" />
+                        <Stop color="#2fd90000" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill></Rectangle>
+            <Label fx:id="startEasyLabel" layoutX="224.0" layoutY="388.0" onMousePressed="#startEasy" style="-fx-font-size: 30; -fx-font-weight: bold;" text="[ easy ]" />
+            <Rectangle fx:id="startHardButton" arcHeight="40.0" arcWidth="40.0" height="200.0" layoutX="526.0" layoutY="310.0" onMousePressed="#startHard" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0">
+               <fill>
+                  <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-50.91" focusDistance="0.49" radius="0.5000000000000001">
+                     <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="WHITE" offset="0.007662835249042145" />
+                        <Stop color="#ff2c2c" offset="0.4674329501915709" />
+                        <Stop color="#ff3d3d3e" offset="0.9003831417624515" />
                         <Stop color="#ffffff00" offset="0.946360153256705" />
                         <Stop color="#ffffff00" offset="1.0" />
                      </stops>
                   </RadialGradient>
-               </fill></Rectangle>
-            <Label fx:id="clickLabel" layoutX="450.0" layoutY="358.0" text="[ click ]" onMousePressed="#setup" textFill="#009fff" />
-            </children></Pane>
+               </fill>
+            </Rectangle>
+            <Label fx:id="startHardLabel" layoutX="574.0" layoutY="388.0" onMousePressed="#startHard" style="-fx-font-size: 30; -fx-font-weight: bold;" text="[ hard ]" />
+            </children>
+        </Pane>
     </children>
 </AnchorPane>

@@ -16,7 +16,7 @@ public class Ball2 extends Circle {
     double xPos, yPos, speedY, speedX, initialSpeedY, initialSpeedX;
     static final double RADIUS = 8;
     static int speedRate;
-    int updateRemains = 0;
+    int updateTicks = 0;
     public static int bricksLeft;
     int[] gridX = {60, 113, 166, 219, 272, 325, 378, 431, 484, 537, 590, 643, 696, 749, 802};
     int[] gridY = {50, 73, 96, 119, 142, 165, 188, 211, 234, 257};
@@ -45,26 +45,25 @@ public class Ball2 extends Circle {
 
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
         if(Controller.isPlaying){
-            updateRemains++;
+            updateTicks++;
 
-            if(updateRemains == 15) {
+            if(updateTicks == 15) {
                 Controller.bricksLeftLabel.setText(String.valueOf(bricksLeft));
-                updateRemains = 0;
+                updateTicks = 0;
                 long millis = (System.currentTimeMillis()-Controller.startTime)%10;
                 long seconds=((System.currentTimeMillis()-Controller.startTime)/1000)%60;
                 long minutes=(((System.currentTimeMillis()-Controller.startTime)-seconds)/1000)/60;
-                Controller.timeElapsedLabel.setText(String.valueOf(minutes+" : "+seconds+"."+millis));
+                Controller.timeElapsedLabel.setText(String.valueOf((minutes >= 1 ? minutes+" : " : "")+seconds+"."+millis));
             }
 
+            setFill(Color.CADETBLUE);
+            toFront();
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY() - speedY);
             double ballPosLEFT  = (getCenterX() - getRadius());
             double ballPosRIGHT = (getCenterX() + getRadius());
             double ballPosTOP   = (getCenterY() - getRadius());
             double ballPosDOWN  = (getCenterY() + getRadius());
-
-            Controller.background.setLayoutY(getCenterY()-500);
-            Controller.background.setLayoutX(getCenterX()-1050);
 
             if(bricksLeft == 0) {
                 Controller.bricksLeftLabel.setText("0");
