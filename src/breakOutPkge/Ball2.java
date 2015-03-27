@@ -9,14 +9,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
+import java.util.Random;
+
 public class Ball2 extends Circle {
     public final Media BOUNDS_SOUND = new Media(getClass().getResource("plink.mp3").toString());
     public final Media PAD_SOUND = new Media(getClass().getResource("plinklo.mp3").toString());
     public final Media SMASH_SOUND = new Media(getClass().getResource("smash.mp3").toString());
-    double xPos, yPos, speedY, speedX, initialSpeedY, initialSpeedX;
+    double xPos, yPos, speedY, speedX;
+    public static double initialXspeed, initialYspeed;
     static final double RADIUS = 8;
     static int speedRate;
     int updateRemains = 0;
+    public static int powerUpTimer = 0;
     public static int bricksLeft;
     int[] gridX = {60, 113, 166, 219, 272, 325, 378, 431, 484, 537, 590, 643, 696, 749, 802};
     int[] gridY = {50, 73, 96, 119, 142, 165, 188, 211, 234, 257};
@@ -26,45 +30,49 @@ public class Ball2 extends Circle {
     int xHOR = 0;
     public static Timeline animation = new Timeline();
 
-    public Ball2(Pane gameWindow, double startX, double startY, Paddle gamePaddle) {
+    public Ball2(Pane gameWindow, double startX, double startY, double speed_X, double speed_Y, Paddle gamePaddle) {
         super(startX, startY, RADIUS);
         this.xPos = startX;
         this.yPos = startY;
-        this.speedX = 1.2;
-        this.speedY = 1.5;
-        initialSpeedY = 1;
-        initialSpeedX = 1;
+        this.speedX = speed_X;
+        this.speedY = speed_Y;
+        initialXspeed = speed_X;
+        initialYspeed = speed_Y;
         this.setFill(Color.web("0x009FFF"));
 
-        animation = new Timeline(new KeyFrame(Duration.millis(60),
-                e -> ballMovement(gameWindow, gamePaddle)));
+        animation = new Timeline(new KeyFrame(Duration.millis(60), e -> ballMovement(gameWindow, gamePaddle)));
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.setRate(speedRate);
         animation.play();
     }
 
     private void ballMovement(Pane gameWindow, Paddle gamePaddle) {
-        if(Controller.isPlaying){
+        if(Controller.isPlaying) {
             updateRemains++;
+            if(powerUpTimer>0) powerUpTimer++;
+
+            if(powerUpTimer == 2200){
+                gamePaddle.setFill(Color.GOLDENROD);
+                gamePaddle.setWidth(70);
+                Controller.powerUP = false;
+            }
 
             if(updateRemains == 15) {
                 Controller.bricksLeftLabel.setText(String.valueOf(bricksLeft));
                 updateRemains = 0;
-                long millis = (System.currentTimeMillis()-Controller.startTime)%10;
-                long seconds=((System.currentTimeMillis()-Controller.startTime)/1000)%60;
-                long minutes=(((System.currentTimeMillis()-Controller.startTime)-seconds)/1000)/60;
-                Controller.timeElapsedLabel.setText(String.valueOf(minutes+" : "+seconds+"."+millis));
+                long seconds = (((System.currentTimeMillis()-Controller.startTime)- Controller.pauseDuration)/1000)%60;
+                long minutes = ((((System.currentTimeMillis()-Controller.startTime)- Controller.pauseDuration)-seconds)/1000)/60;
+                boolean shouldDisplayZero = (minutes < 0) && (seconds > 10);
+                Controller.timeElapsedLabel.setText((minutes > 0 ? String.valueOf(minutes+" min  ") : "")+(shouldDisplayZero ? "0"+seconds : seconds)+" sec");
             }
 
             setCenterX(getCenterX() + speedX);
             setCenterY(getCenterY() - speedY);
+
             double ballPosLEFT  = (getCenterX() - getRadius());
             double ballPosRIGHT = (getCenterX() + getRadius());
             double ballPosTOP   = (getCenterY() - getRadius());
             double ballPosDOWN  = (getCenterY() + getRadius());
-
-            Controller.background.setLayoutY(getCenterY()-500);
-            Controller.background.setLayoutX(getCenterX()-1050);
 
             if(bricksLeft == 0) {
                 Controller.bricksLeftLabel.setText("0");
@@ -86,7 +94,7 @@ public class Ball2 extends Circle {
                 if ((ballAtBrickYUp(gridY[7]) && ballMovingDown()) || (ballAtBrickDown(gridY[7]) && ballMovingUp())) yVERT = 8;
                 if ((ballAtBrickYUp(gridY[8]) && ballMovingDown()) || (ballAtBrickDown(gridY[8]) && ballMovingUp())) yVERT = 9;
                 if ((ballAtBrickYUp(gridY[9]) && ballMovingDown()) || (ballAtBrickDown(gridY[9]) && ballMovingUp())) yVERT = 10;
-                if ((ballOutsideBrickY() && ballMovingDown()) || (ballOutsideBrickY() && ballMovingUp())) yVERT = 0;
+                if ((ballOutsideBrickY()      && ballMovingDown()) || (ballOutsideBrickY()       && ballMovingUp())) yVERT = 0;
 
                 if (ballAtBrickYHorizontally(gridY[0])) yHOR = 1;
                 if (ballAtBrickYHorizontally(gridY[1])) yHOR = 2;
@@ -98,18 +106,18 @@ public class Ball2 extends Circle {
                 if (ballAtBrickYHorizontally(gridY[7])) yHOR = 8;
                 if (ballAtBrickYHorizontally(gridY[8])) yHOR = 9;
                 if (ballAtBrickYHorizontally(gridY[9])) yHOR = 10;
-                if (ballOutsideBrickYHorizontally()) yHOR = 0;
+                if (ballOutsideBrickYHorizontally())    yHOR = 0;
 
-                if ((ballAtBrickXRight(gridX[0]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[0]) && ballMovingLeft())) xHOR = 1;
-                if ((ballAtBrickXRight(gridX[1]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[1]) && ballMovingLeft())) xHOR = 2;
-                if ((ballAtBrickXRight(gridX[2]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[2]) && ballMovingLeft())) xHOR = 3;
-                if ((ballAtBrickXRight(gridX[3]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[3]) && ballMovingLeft())) xHOR = 4;
-                if ((ballAtBrickXRight(gridX[4]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[4]) && ballMovingLeft())) xHOR = 5;
-                if ((ballAtBrickXRight(gridX[5]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[5]) && ballMovingLeft())) xHOR = 6;
-                if ((ballAtBrickXRight(gridX[6]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[6]) && ballMovingLeft())) xHOR = 7;
-                if ((ballAtBrickXRight(gridX[7]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[7]) && ballMovingLeft())) xHOR = 8;
-                if ((ballAtBrickXRight(gridX[8]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[8]) && ballMovingLeft())) xHOR = 9;
-                if ((ballAtBrickXRight(gridX[9]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[9]) && ballMovingLeft())) xHOR = 10;
+                if ((ballAtBrickXRight(gridX[0])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[0])  && ballMovingLeft())) xHOR = 1;
+                if ((ballAtBrickXRight(gridX[1])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[1])  && ballMovingLeft())) xHOR = 2;
+                if ((ballAtBrickXRight(gridX[2])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[2])  && ballMovingLeft())) xHOR = 3;
+                if ((ballAtBrickXRight(gridX[3])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[3])  && ballMovingLeft())) xHOR = 4;
+                if ((ballAtBrickXRight(gridX[4])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[4])  && ballMovingLeft())) xHOR = 5;
+                if ((ballAtBrickXRight(gridX[5])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[5])  && ballMovingLeft())) xHOR = 6;
+                if ((ballAtBrickXRight(gridX[6])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[6])  && ballMovingLeft())) xHOR = 7;
+                if ((ballAtBrickXRight(gridX[7])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[7])  && ballMovingLeft())) xHOR = 8;
+                if ((ballAtBrickXRight(gridX[8])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[8])  && ballMovingLeft())) xHOR = 9;
+                if ((ballAtBrickXRight(gridX[9])  && ballMovingRight()) || (ballAtBrickXLeft(gridX[9])  && ballMovingLeft())) xHOR = 10;
                 if ((ballAtBrickXRight(gridX[10]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[10]) && ballMovingLeft())) xHOR = 11;
                 if ((ballAtBrickXRight(gridX[11]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[11]) && ballMovingLeft())) xHOR = 12;
                 if ((ballAtBrickXRight(gridX[12]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[12]) && ballMovingLeft())) xHOR = 13;
@@ -117,22 +125,22 @@ public class Ball2 extends Circle {
                 if ((ballAtBrickXRight(gridX[14]) && ballMovingRight()) || (ballAtBrickXLeft(gridX[14]) && ballMovingLeft())) xHOR = 15;
                 if (ballOutsideBrickX()) xHOR = 0;
 
-                if (ballAtBrickXVertically(gridX[0])) xVERT = 1;
-                if (ballAtBrickXVertically(gridX[1])) xVERT = 2;
-                if (ballAtBrickXVertically(gridX[2])) xVERT = 3;
-                if (ballAtBrickXVertically(gridX[3])) xVERT = 4;
-                if (ballAtBrickXVertically(gridX[4])) xVERT = 5;
-                if (ballAtBrickXVertically(gridX[5])) xVERT = 6;
-                if (ballAtBrickXVertically(gridX[6])) xVERT = 7;
-                if (ballAtBrickXVertically(gridX[7])) xVERT = 8;
-                if (ballAtBrickXVertically(gridX[8])) xVERT = 9;
-                if (ballAtBrickXVertically(gridX[9])) xVERT = 10;
+                if (ballAtBrickXVertically(gridX[0]))  xVERT = 1;
+                if (ballAtBrickXVertically(gridX[1]))  xVERT = 2;
+                if (ballAtBrickXVertically(gridX[2]))  xVERT = 3;
+                if (ballAtBrickXVertically(gridX[3]))  xVERT = 4;
+                if (ballAtBrickXVertically(gridX[4]))  xVERT = 5;
+                if (ballAtBrickXVertically(gridX[5]))  xVERT = 6;
+                if (ballAtBrickXVertically(gridX[6]))  xVERT = 7;
+                if (ballAtBrickXVertically(gridX[7]))  xVERT = 8;
+                if (ballAtBrickXVertically(gridX[8]))  xVERT = 9;
+                if (ballAtBrickXVertically(gridX[9]))  xVERT = 10;
                 if (ballAtBrickXVertically(gridX[10])) xVERT = 11;
                 if (ballAtBrickXVertically(gridX[11])) xVERT = 12;
                 if (ballAtBrickXVertically(gridX[12])) xVERT = 13;
                 if (ballAtBrickXVertically(gridX[13])) xVERT = 14;
                 if (ballAtBrickXVertically(gridX[14])) xVERT = 15;
-                if (ballOutsideBrickXVertically()) xVERT = 0;
+                if (ballOutsideBrickXVertically())     xVERT = 0;
             }
             
             if (yHOR >= 1 && xHOR >= 1) {
@@ -142,6 +150,9 @@ public class Ball2 extends Circle {
                     Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
                     bricksLeft--;
                     speedX = -speedX;
+                    Random rand = new Random();
+                    int lucky = rand.nextInt(20);
+                    Controller.powerMeUp(lucky, gameWindow);
                 }
             }
 
@@ -152,6 +163,9 @@ public class Ball2 extends Circle {
                     Brick.bricks.set(((15 * (yVERT - 1)) + (xVERT - 1)), null);
                     bricksLeft--;
                     speedY = -speedY;
+                    Random rand = new Random();
+                    int lucky = rand.nextInt(4);
+                    Controller.powerMeUp(lucky, gameWindow);
                 }
             }
 
@@ -186,11 +200,14 @@ public class Ball2 extends Circle {
                 }
                 if (atBottomBorder) {
                     if(Controller.lives>1) {
-                        Controller.isPaused = true;
-                        setCenterY(450);
-                        speedY = 1;
+                        setCenterY(420);
+                        setCenterX(420);
+                        speedX = initialXspeed;
+                        speedY = initialYspeed;
                         Controller.lives--;
                         Controller.ballsRemainginLabel.setText(String.valueOf(Controller.lives));
+                        Controller.isPaused = true;
+                        Controller.pause(gameWindow);
                     } else {
                         setCenterY(380);
                         setCenterX(400 - getRadius());
@@ -199,6 +216,8 @@ public class Ball2 extends Circle {
                         Controller.ballsRemainginLabel.setText(String.valueOf(Controller.lives));
                         Controller.isPlaying = false;
                         Controller.endGame(gameWindow);
+                        gameWindow.getChildren().removeAll(Controller.ball);
+                        animation.stop();
                     }
                 }
             }

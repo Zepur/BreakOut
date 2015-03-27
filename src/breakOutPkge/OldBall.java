@@ -12,7 +12,7 @@ import javafx.util.Duration;
 import java.util.ConcurrentModificationException;
 import java.util.Random;
 
-public class Ball extends Circle {
+public class OldBall extends Circle {
     public Media boundS = new Media(getClass().getResource("plink.mp3").toString());
     public Media padS = new Media(getClass().getResource("plinklo.mp3").toString());
     public Media smashS = new Media(getClass().getResource("smash.mp3").toString());
@@ -23,7 +23,7 @@ public class Ball extends Circle {
     public static int ballsLeft;
     public static Timeline animation = new Timeline();
 
-    public Ball(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
+    public OldBall(Pane gameWindow, double startX, double startY, double speedX, double speedY, Paddle gamePaddle) {
         super(startX, startY, radius);
         this.xPos = startX;
         this.yPos = startY;
@@ -91,7 +91,7 @@ public class Ball extends Circle {
                                     gameWindow.getChildren().removeAll(brick);
                                     Brick.bricks.set(Brick.bricks.indexOf(brick), null);
                                     ballsLeft--;
-                                    if (gameWindow.getChildren().indexOf(Controller.powerUPpadSize) != 0) {
+                                    if (gameWindow.getChildren().indexOf(Controller.powerUPcircle) != 0) {
                                         Random rand = new Random();
                                         int lucky = rand.nextInt(11);
                                         Controller.powerMeUp(lucky, gameWindow);

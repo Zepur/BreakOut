@@ -1,8 +1,8 @@
 package breakOutPkge;
 
 import javafx.scene.effect.Reflection;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class Paddle extends Rectangle {
@@ -14,6 +14,9 @@ public class Paddle extends Rectangle {
         r.setTopOffset(4);
         r.setFraction(0.8);
         setEffect(r);
+    }
 
+    public boolean collides(Circle powerUP) {
+        return powerUP.intersects(getX(), getY(), getWidth(), getHeight());
     }
 }
