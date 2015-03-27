@@ -16,11 +16,12 @@ public class Ball2 extends Circle {
     public final Media PAD_SOUND = new Media(getClass().getResource("plinklo.mp3").toString());
     public final Media SMASH_SOUND = new Media(getClass().getResource("smash.mp3").toString());
     double xPos, yPos, speedY, speedX;
-    public static double initialXspeed, initialYspeed;
+    public static double initialXspeed, initialYspeed, startXspeed, startYspeed;
     static final double RADIUS = 8;
     static int speedRate;
     int updateRemains = 0;
     public static int powerUpTimer = 0;
+    public static int extraLifeTimer = 0;
     public static int bricksLeft;
     int[] gridX = {60, 113, 166, 219, 272, 325, 378, 431, 484, 537, 590, 643, 696, 749, 802};
     int[] gridY = {50, 73, 96, 119, 142, 165, 188, 211, 234, 257};
@@ -38,7 +39,11 @@ public class Ball2 extends Circle {
         this.speedY = speed_Y;
         initialXspeed = speed_X;
         initialYspeed = speed_Y;
+        startXspeed = speed_X;
+        startYspeed = speed_Y;
         this.setFill(Color.web("0x009FFF"));
+        this.setStroke(Color.WHITE);
+        this.setStrokeWidth(1);
 
         animation = new Timeline(new KeyFrame(Duration.millis(60), e -> ballMovement(gameWindow, gamePaddle)));
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -50,10 +55,20 @@ public class Ball2 extends Circle {
         if(Controller.isPlaying) {
             updateRemains++;
             if(powerUpTimer>0) powerUpTimer++;
+            if(extraLifeTimer>0) extraLifeTimer++;
+
+            if(extraLifeTimer == 600){
+                Controller.powerUpInfo.setText("");
+                extraLifeTimer = 0;
+            }
 
             if(powerUpTimer == 2200){
                 gamePaddle.setFill(Color.GOLDENROD);
                 gamePaddle.setWidth(70);
+                speedX = initialXspeed;
+                speedY = initialYspeed;
+                Controller.powerUpInfo.setText("");
+                gameWindow.getChildren().removeAll(Controller.powerUpInfo);
                 Controller.powerUP = false;
             }
 
@@ -150,9 +165,12 @@ public class Ball2 extends Circle {
                     Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
                     bricksLeft--;
                     speedX = -speedX;
-                    Random rand = new Random();
-                    int lucky = rand.nextInt(20);
-                    Controller.powerMeUp(lucky, gameWindow);
+                    initialXspeed = -initialXspeed;
+                    if(!Controller.powerUP){
+                        Random rand = new Random();
+                        int lucky = rand.nextInt(20);
+                        Controller.powerMeUp(lucky, gameWindow);
+                    }
                 }
             }
 
@@ -163,12 +181,15 @@ public class Ball2 extends Circle {
                     Brick.bricks.set(((15 * (yVERT - 1)) + (xVERT - 1)), null);
                     bricksLeft--;
                     speedY = -speedY;
-                    Random rand = new Random();
-                    int lucky = rand.nextInt(4);
-                    Controller.powerMeUp(lucky, gameWindow);
+                    initialYspeed = -initialYspeed;
+                    if(!Controller.powerUP){
+                        Random rand = new Random();
+                        int lucky = rand.nextInt(20);
+                        Controller.powerMeUp(lucky, gameWindow);
+                    }
                 }
             }
-
+            
             if (((getCenterY() >= gamePaddle.getY()-getRadius()) && (getCenterY() <= 520))){
                 boolean xx = ((getCenterX() > (gamePaddle.getX() - getRadius())) && (getCenterX() < (gamePaddle.getX() + gamePaddle.getWidth() + getRadius())));
                 boolean yy = ((getCenterY() < gamePaddle.getY() + getRadius() + gamePaddle.getHeight()) && (getCenterY() > gamePaddle.getY() - getRadius()));
@@ -178,10 +199,12 @@ public class Ball2 extends Circle {
                 if (((right && ballMovingLeft()) || (left && ballMovingRight())) && yy) {
                     noiceMaker(PAD_SOUND);
                     speedX = -speedX;
+                    initialXspeed = -initialXspeed;
                 }
                 if (xx && (top && ballMovingDown())) {
                     noiceMaker(PAD_SOUND);
                     speedY = -speedY;
+                    initialYspeed = -initialYspeed;
                 }
             }
 
@@ -193,17 +216,29 @@ public class Ball2 extends Circle {
                 if (atRightBorder || atLeftBorder) {
                     noiceMaker(BOUNDS_SOUND);
                     speedX = -speedX;
+                    initialXspeed = -initialXspeed;
                 }
                 if (atTopBorder) {
                     noiceMaker(BOUNDS_SOUND);
                     speedY = -speedY;
+                    initialYspeed = -initialYspeed;
                 }
                 if (atBottomBorder) {
                     if(Controller.lives>1) {
+                        if(Controller.powerUP) {
+                            powerUpTimer = 0;
+                            gamePaddle.setFill(Color.GOLDENROD);
+                            gamePaddle.setWidth(70);
+                            speedX = startXspeed;
+                            speedY = startYspeed;
+                            Controller.powerUpInfo.setText("");
+                            gameWindow.getChildren().removeAll(Controller.powerUpInfo);
+                            Controller.powerUP = false;
+                        }
                         setCenterY(420);
                         setCenterX(420);
-                        speedX = initialXspeed;
-                        speedY = initialYspeed;
+                        speedX = (startXspeed+0.1);
+                        speedY = startYspeed;
                         Controller.lives--;
                         Controller.ballsRemainginLabel.setText(String.valueOf(Controller.lives));
                         Controller.isPaused = true;
@@ -224,17 +259,17 @@ public class Ball2 extends Circle {
         }
     }
 
-    private boolean ballOutsideBrickY() {           return (((getCenterY() + getRadius()) < gridY[0]) || ((getCenterY() - getRadius()) > (gridY[9] + Brick.BRICK_HEIGHT)));}
+    private boolean ballOutsideBrickY() {           return (((getCenterY() + ( getRadius() ) ) < gridY[0]) || ((getCenterY() - ( getRadius() ) ) > (gridY[9] + Brick.BRICK_HEIGHT)));}
     private boolean ballOutsideBrickYHorizontally(){return ((getCenterY() < gridY[0]) || (getCenterY() > (gridY[9] + Brick.BRICK_HEIGHT))); }
     private boolean ballOutsideBrickXVertically() { return ((getCenterX() < gridX[0]) || (getCenterX() > (gridX[14] + Brick.BRICK_WIDTH))); }
-    private boolean ballOutsideBrickX() {           return (((getCenterX() + getRadius()) < gridX[0]) || ((getCenterX() - getRadius()) > (gridX[14] + Brick.BRICK_WIDTH))); }
+    private boolean ballOutsideBrickX() {           return (((getCenterX() + ( getRadius() ) ) < gridX[0]) || ((getCenterX() - ( getRadius() ) ) > (gridX[14] + Brick.BRICK_WIDTH))); }
     
-    private boolean ballAtBrickXRight(int i) {      return ((getCenterX() + getRadius() >= i)  && (getCenterX() + getRadius() <= i + Brick.BRICK_WIDTH)); }
-    private boolean ballAtBrickXLeft(int i) {       return ((getCenterX() - getRadius() >= i)  && (getCenterX() - getRadius() <= i + Brick.BRICK_WIDTH)); }
+    private boolean ballAtBrickXRight(int i) {      return ((getCenterX() + ( getRadius() +1.5)  >= i)  && (getCenterX() + ( getRadius() +1.5)  <= i + Brick.BRICK_WIDTH)); }
+    private boolean ballAtBrickXLeft(int i) {       return ((getCenterX() - ( getRadius() +1.5)  >= i)  && (getCenterX() - ( getRadius() +1.5)  <= i + Brick.BRICK_WIDTH)); }
     private boolean ballAtBrickXVertically(int i) { return ((getCenterX() >= i)  && ((getCenterX() <= i  + Brick.BRICK_WIDTH)));}
     private boolean ballAtBrickYHorizontally(int i){return ((getCenterY() >= i)  && (getCenterY() <= i + Brick.BRICK_HEIGHT)); }
-    private boolean ballAtBrickYUp(int i){          return ((getCenterY() + getRadius() >= i)  && (getCenterY() + getRadius() <= i + Brick.BRICK_HEIGHT)); }
-    private boolean ballAtBrickDown(int i){         return ((getCenterY() - getRadius() >= i)  && (getCenterY() - getRadius() <= i + Brick.BRICK_HEIGHT)); }
+    private boolean ballAtBrickYUp(int i){          return ((getCenterY() + ( getRadius() +1.5)  >= i)  && (getCenterY() + ( getRadius() +1.5)  <= i + Brick.BRICK_HEIGHT)); }
+    private boolean ballAtBrickDown(int i){         return ((getCenterY() - ( getRadius() +1.5)  >= i)  && (getCenterY() - ( getRadius() +1.5)  <= i + Brick.BRICK_HEIGHT)); }
     
     private boolean ballMovingUp(){                 return speedY > 0; }
     private boolean ballMovingDown(){               return speedY < 0; }
