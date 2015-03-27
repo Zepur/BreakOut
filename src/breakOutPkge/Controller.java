@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
@@ -51,27 +50,28 @@ public class Controller {
     static ImageView legendImg          = new ImageView(legend);
     static ImagePattern unmutedIMG      = new ImagePattern(unmuted);
     static ImagePattern mutedIMG        = new ImagePattern(muted);
-    static Button easyButton            = new Button("[ easy ]");
-    static Button hardButton            = new Button("[ hard ]");
+    static Button easyButton            = new Button("[ play ]");
     static Button bigButton             = new Button();
     static Label bigLabel               = new Label();
+    static Label levelInfoLabel         = new Label("lvl:");
+    static Label levelLabel             = new Label("0");
     static Label powerUpInfo            = new Label();
     static Label pauseLabel             = new Label("[ paused ]");
     static Label ballsRemainingInfoLabel= new Label("balls remaining:");
     static Label ballsRemainginLabel    = new Label();
     static Label bricksLeftInfoLabel    = new Label("bricks remaining:");
     static Label bricksLeftLabel        = new Label("150");
-    static Label timeElapsedInfoLabel   = new Label("time:");
-    static Label timeElapsedLabel       = new Label("0.0");
+    static Label scoreInfoLabel         = new Label("score:");
+    static Label scoreLabel             = new Label("0");
     public static Rectangle muteButton  = new Rectangle();
     public static Rectangle pauseRect   = new Rectangle();
     public static int lives             = 3;
     public static int levelNumber       = 1;
+    public static int score             = 1;
     public static Circle powerUPcircle;
     static ImageView background;
     public static MediaPlayer jukeBox;
     public static boolean isPlaying, powerUP, isMuted, isPaused;
-    protected static long startTime, stopTime, pauseStartTime, pauseDuration;
     static Ball2 ball;
     static Paddle gamePaddle;
     static Timeline powerUpAnimation;
@@ -80,11 +80,20 @@ public class Controller {
     public void setup(){
         gameWindow.setCursor(Cursor.CROSSHAIR);
 
+        levelInfoLabel.setLayoutY(650);
+        levelInfoLabel.setLayoutX(300);
+        levelInfoLabel.setTextFill(Color.WHITE);
+        levelInfoLabel.setStyle("-fx-font-size: 14;");
+
+        levelLabel.setLayoutY(650);
+        levelLabel.setLayoutX(330);
+        levelLabel.setTextFill(Color.web("0x009fff"));
+        levelLabel.setStyle("-fx-font-size: 14;");
+
         powerUpInfo.setLayoutY(600);
-        powerUpInfo.setLayoutX(360);
+        powerUpInfo.setLayoutX((gameWindow.getWidth()/ 2)-40);
         powerUpInfo.setTextFill(Color.DEEPPINK);
-        powerUpInfo.setEffect(new GaussianBlur(5));
-        powerUpInfo.setStyle("-fx-font-size:40; -fx-stroke-width:2; -fx-stroke-color: red;");
+        powerUpInfo.setStyle("-fx-font-size: 26;");
 
         LinearGradient pauseRectGradient = LinearGradient.valueOf("from 100% 0% to 100% 100%, #009FFF 50%, transparent 100%");
         pauseRect.setFill(pauseRectGradient);
@@ -128,8 +137,9 @@ public class Controller {
         legendImg.setY(30);
         legendImg.setX((gameWindow.getWidth() - legend.getWidth()) / 2);
 
-        gamePaddle = new Paddle(70, 20);
-        gameWindow.setOnMouseMoved(e -> gamePaddle.setX((e.getX() - (gamePaddle.getWidth() / 2))));
+        gamePaddle = new Paddle(70, 10);
+        gameWindow.setOnMouseMoved(e ->
+            gamePaddle.setX((e.getX() - (gamePaddle.getWidth() / 2))) );
 
         gameWindow.getChildren().remove(startButton);
         gameWindow.getChildren().remove(clickToPlayLabel);
@@ -141,40 +151,42 @@ public class Controller {
         gameWindow.getChildren().add(bigLabel);
 
         bricksLeftInfoLabel.setLayoutX(30);
-        bricksLeftInfoLabel.setLayoutY(675);
-        bricksLeftInfoLabel.setTextFill(Color.DEEPSKYBLUE);
+        bricksLeftInfoLabel.setLayoutY(680);
+        bricksLeftInfoLabel.setTextFill(Color.WHITE);
         bricksLeftInfoLabel.setStyle("-fx-font-size: 14;");
 
         bricksLeftLabel.setLayoutX(150);
-        bricksLeftLabel.setLayoutY(675);
-        bricksLeftLabel.setTextFill(Color.WHITE);
-        bricksLeftLabel.setStyle("-fx-font-size: 16;");
+        bricksLeftLabel.setLayoutY(680);
+        bricksLeftLabel.setTextFill(Color.web("0x009FFF"));
+        bricksLeftLabel.setStyle("-fx-font-size: 14;");
 
-        timeElapsedInfoLabel.setLayoutX(280);
-        timeElapsedInfoLabel.setLayoutY(645);
-        timeElapsedInfoLabel.setTextFill(Color.DEEPSKYBLUE);
-        timeElapsedInfoLabel.setStyle("-fx-font-size: 14;");
+        scoreInfoLabel.setLayoutX(30);
+        scoreInfoLabel.setLayoutY(650);
+        scoreInfoLabel.setTextFill(Color.WHITE);
+        scoreInfoLabel.setStyle("-fx-font-size: 14;");
 
-        timeElapsedLabel.setLayoutY(645);
-        timeElapsedLabel.setLayoutX(320);
-        timeElapsedLabel.setTextFill(Color.WHITE);
-        timeElapsedLabel.setStyle("-fx-font-size: 16;");
+        scoreLabel.setLayoutY(650);
+        scoreLabel.setLayoutX(150);
+        scoreLabel.setTextFill(Color.web("0x009FFF"));
+        scoreLabel.setStyle("-fx-font-size: 14;");
 
         ballsRemainginLabel.setText(String.valueOf(lives));
-        ballsRemainginLabel.setLayoutX(148);
+        ballsRemainginLabel.setLayoutX(150);
         ballsRemainginLabel.setLayoutY(620);
-        ballsRemainginLabel.setTextFill(Color.WHITE);
-        ballsRemainginLabel.setStyle("-fx-font-size: 16;");
+        ballsRemainginLabel.setTextFill(Color.web("0x009FFF"));
+        ballsRemainginLabel.setStyle("-fx-font-size: 14;");
 
         ballsRemainingInfoLabel.setLayoutX(30);
         ballsRemainingInfoLabel.setLayoutY(620);
-        ballsRemainingInfoLabel.setTextFill(Color.DEEPSKYBLUE);
+        ballsRemainingInfoLabel.setTextFill(Color.WHITE);
         ballsRemainingInfoLabel.setStyle("-fx-font-size: 14;");
 
+        gameWindow.getChildren().add(levelInfoLabel);
+        gameWindow.getChildren().add(levelLabel);
         gameWindow.getChildren().add(bricksLeftInfoLabel);
         gameWindow.getChildren().add(bricksLeftLabel);
-        gameWindow.getChildren().add(timeElapsedInfoLabel);
-        gameWindow.getChildren().add(timeElapsedLabel);
+        gameWindow.getChildren().add(scoreInfoLabel);
+        gameWindow.getChildren().add(scoreLabel);
         gameWindow.getChildren().add(ballsRemainginLabel);
         gameWindow.getChildren().add(ballsRemainingInfoLabel);
 
@@ -182,41 +194,22 @@ public class Controller {
     }
 
     private static void startNewGame(Pane gameWindow){
-        easyButton.setTextFill(Color.WHITE);
-        easyButton.setBackground(new Background(new BackgroundFill(Color.DARKGREEN, null, null)));
-        easyButton.setLayoutX(300);
-        easyButton.setLayoutY(300);
+        easyButton.setTextFill(Color.web("0x009FFF"));
+        easyButton.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        easyButton.setStyle("-fx-border-color: #009FFF");
+        easyButton.setLayoutX(400);
+        easyButton.setLayoutY((gameWindow.getWidth()-100)/2);
         easyButton.setMinWidth(100);
         easyButton.setMinHeight(40);
         easyButton.setOnMousePressed(e -> {
             Ball2.speedRate = 10;
             gameWindow.getChildren().remove(easyButton);
-            gameWindow.getChildren().remove(hardButton);
             gameWindow.getChildren().remove(legendImg);
-            startTime = System.currentTimeMillis();
             ball = new Ball2(gameWindow, 396, 420, 1.3, 1.4, gamePaddle);
             gameWindow.getChildren().addAll(ball);
             if(gameWindow.getChildren().contains(ball)) addBricks(gameWindow);
         });
-
-        hardButton.setTextFill(Color.WHITE);
-        hardButton.setBackground(new Background(new BackgroundFill(Color.DARKRED, null, null)));
-        hardButton.setLayoutX(500);
-        hardButton.setLayoutY(300);
-        hardButton.setMinWidth(100);
-        hardButton.setMinHeight(40);
-        hardButton.setOnMousePressed(e -> {
-            Ball2.speedRate = 10;
-            gameWindow.getChildren().remove(easyButton);
-            gameWindow.getChildren().remove(hardButton);
-            gameWindow.getChildren().remove(legendImg);
-            startTime = System.currentTimeMillis();
-            ball = new Ball2(gameWindow, 396, 420, 2.3, 2.4, gamePaddle);
-            gameWindow.getChildren().addAll(ball);
-            if(gameWindow.getChildren().contains(ball)) addBricks(gameWindow);
-        });
         gameWindow.getChildren().add(easyButton);
-        gameWindow.getChildren().add(hardButton);
     }
 
     private static void addBricks(Pane gameWindow) {
@@ -285,12 +278,10 @@ public class Controller {
             pauseRect.toFront();
             pauseLabel.toFront();
             Ball2.animation.pause();
-            pauseStartTime = System.currentTimeMillis();
         } else {
             gameWindow.getChildren().removeAll(pauseRect);
             gameWindow.getChildren().removeAll(pauseLabel);
             Ball2.animation.play();
-            pauseDuration += System.currentTimeMillis() - pauseStartTime;
         }
     }
 
@@ -315,59 +306,55 @@ public class Controller {
     private static void movePowerUP(Pane gameWindow){
         powerUPcircle.setCenterY(powerUPcircle.getCenterY() + 5);
         if(gamePaddle.collides(powerUPcircle)) {
-            int powerUpPicker = rand.nextInt(8);
+            int powerUpPicker = rand.nextInt(7);
             gameWindow.getChildren().removeAll(powerUPcircle);
             gameWindow.getChildren().add(powerUpInfo);
             powerUpAnimation.stop();
             if      (powerUpPicker == 0){
-                gamePaddle.setWidth(gamePaddle.getWidth() - 20);
-                Ball2.powerUpTimer = 1;
+                gamePaddle.setWidth(gamePaddle.getWidth() - 25);
+                Ball2.powerUpTimer = 1337;
                 powerUpInfo.setText("small pad");
             }
             else if (powerUpPicker == 1) {
-                gamePaddle.setWidth(gamePaddle.getWidth() + 25);
-                Ball2.powerUpTimer = 1;
+                gamePaddle.setWidth(gamePaddle.getWidth() + 30);
+                Ball2.powerUpTimer = 1404;
                 powerUpInfo.setText("big pad");
             }
             else if (powerUpPicker == 2) {
                 lives++;
                 ballsRemainginLabel.setText(String.valueOf(lives));
-                powerUP = false;
                 powerUpInfo.setText("extra life");
                 FadeTransition ft = new FadeTransition(Duration.millis(3000), powerUpInfo);
                 ft.setFromValue(1.0);
-                ft.setToValue(0.3);
+                ft.setToValue(0.2);
                 ft.setCycleCount(4);
                 ft.setAutoReverse(true);
                 ft.play();
-                Ball2.extraLifeTimer = 1;
+                Ball2.powerUpTimer = 2300;
             }
             else if (powerUpPicker == 3) {
                 gamePaddle.setFill(Color.LIMEGREEN);
-                Ball2.powerUpTimer = 1;
+                Ball2.powerUpTimer = 1400;
                 powerUpInfo.setText("green pad");
             }
             else if (powerUpPicker == 4) {
-                gamePaddle.setFill(Color.FUCHSIA);
-                Ball2.powerUpTimer = 1;
-                powerUpInfo.setText("pink pad");
+                ball.setFill(Color.TRANSPARENT);
+                Ball2.powerUpTimer = 800;
+                powerUpInfo.setText("\"invisible\" ball");
             }
             else if (powerUpPicker == 5) {
                 gamePaddle.setFill(Color.TRANSPARENT);
-                Ball2.powerUpTimer = 1;
-                powerUpInfo.setText("transparent pad");
+                gamePaddle.setStroke(Color.TRANSPARENT);
+                Ball2.powerUpTimer = 1100;
+                powerUpInfo.setText("invisible pad");
             }
             else if (powerUpPicker == 6) {
-                ball.speedY *= 1.5;
-                ball.speedX *= 1.5;
-                Ball2.powerUpTimer = 1;
-                powerUpInfo.setText("fast ball");
-            }
-            else if (powerUpPicker == 7) {
-                ball.speedY *= 0.5;
-                ball.speedX *= 0.5;
-                Ball2.powerUpTimer = 1;
-                powerUpInfo.setText("slow ball");
+                Ball2.superBall = true;
+                ball.setFill(Color.YELLOW);
+                ball.setStrokeWidth(5);
+                ball.setStroke(Color.GOLD);
+                Ball2.powerUpTimer = 2135;
+                powerUpInfo.setText("SMASH");
             }
         }
         if(powerUPcircle.getCenterY() >= 650){
@@ -380,17 +367,31 @@ public class Controller {
     public static void betweenLVLs(Pane gameWindow) {
         bigLabel.setText("You beat lvl: " + levelNumber + "!\n");
         bigLabel.setTextFill(Color.GREENYELLOW);
-        bigButton.setText("Start lvl: " + (levelNumber + 1));
-        gameWindow.getChildren().removeAll(Brick.bricks);
-        gameWindow.getChildren().addAll(bigButton);
-        bigButton.setOnAction(e -> {
-            gameWindow.getChildren().removeAll(bigButton);
-            gameWindow.getChildren().removeAll(bigLabel);
-            levelNumber++;
-            ball.speedX = Ball2.startXspeed;
-            ball.speedY = Ball2.startYspeed;
-            addBricks(gameWindow);
-        });
+        bigButton.setText(levelNumber<3 ? "Start lvl: " + (levelNumber + 1): "Game won!");
+        if(levelNumber<3) {
+            gameWindow.getChildren().removeAll(Brick.bricks);
+            gameWindow.getChildren().addAll(bigButton);
+            bigButton.setOnAction(e -> {
+                gameWindow.getChildren().removeAll(bigButton);
+                gameWindow.getChildren().removeAll(bigLabel);
+                levelNumber++;
+                ball.speedX = Ball2.startXspeed;
+                ball.speedY = Ball2.startYspeed;
+                addBricks(gameWindow);
+            });
+        } else {
+            bigButton.setOnAction(e -> {
+                ball = null;
+                gameWindow.getChildren().removeAll(Brick.bricks);
+                gameWindow.getChildren().removeAll(bigLabel);
+                gameWindow.getChildren().removeAll(bigButton);
+                Brick.bricks = new ArrayList<>();
+                levelNumber = 1;
+                lives = 3;
+                ballsRemainginLabel.setText(String.valueOf(lives));
+                startNewGame(gameWindow);
+            });
+        }
     }
 
     public static void endGame(Pane gameWindow){

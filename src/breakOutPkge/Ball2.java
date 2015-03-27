@@ -21,8 +21,8 @@ public class Ball2 extends Circle {
     static int speedRate;
     int updateRemains = 0;
     public static int powerUpTimer = 0;
-    public static int extraLifeTimer = 0;
     public static int bricksLeft;
+    public static boolean superBall;
     int[] gridX = {60, 113, 166, 219, 272, 325, 378, 431, 484, 537, 590, 643, 696, 749, 802};
     int[] gridY = {50, 73, 96, 119, 142, 165, 188, 211, 234, 257};
     int yVERT = 0;
@@ -55,30 +55,25 @@ public class Ball2 extends Circle {
         if(Controller.isPlaying) {
             updateRemains++;
             if(powerUpTimer>0) powerUpTimer++;
-            if(extraLifeTimer>0) extraLifeTimer++;
 
-            if(extraLifeTimer == 600){
-                Controller.powerUpInfo.setText("");
-                extraLifeTimer = 0;
-            }
-
-            if(powerUpTimer == 2200){
+            if(powerUpTimer == 3200){
                 gamePaddle.setFill(Color.GOLDENROD);
                 gamePaddle.setWidth(70);
-                speedX = initialXspeed;
-                speedY = initialYspeed;
+                gamePaddle.setStroke(Color.DODGERBLUE);
+                setFill(Color.web("0x009FFF"));
+                setStroke(Color.WHITE);
+                setStrokeWidth(1);
+                superBall = false;
                 Controller.powerUpInfo.setText("");
                 gameWindow.getChildren().removeAll(Controller.powerUpInfo);
                 Controller.powerUP = false;
             }
 
-            if(updateRemains == 15) {
+            if(updateRemains == 30) {
+                Controller.levelLabel.setText(String.valueOf(Controller.levelNumber));
+                Controller.scoreLabel.setText(String.valueOf(Controller.score));
                 Controller.bricksLeftLabel.setText(String.valueOf(bricksLeft));
                 updateRemains = 0;
-                long seconds = (((System.currentTimeMillis()-Controller.startTime)- Controller.pauseDuration)/1000)%60;
-                long minutes = ((((System.currentTimeMillis()-Controller.startTime)- Controller.pauseDuration)-seconds)/1000)/60;
-                boolean shouldDisplayZero = (minutes < 0) && (seconds > 10);
-                Controller.timeElapsedLabel.setText((minutes > 0 ? String.valueOf(minutes+" min  ") : "")+(shouldDisplayZero ? "0"+seconds : seconds)+" sec");
             }
 
             setCenterX(getCenterX() + speedX);
@@ -90,9 +85,6 @@ public class Ball2 extends Circle {
             double ballPosDOWN  = (getCenterY() + getRadius());
 
             if(bricksLeft == 0) {
-                Controller.bricksLeftLabel.setText("0");
-                Controller.stopTime = System.currentTimeMillis();
-                System.out.println("time used: " +(Controller.stopTime - Controller.startTime) / 1000);
                 setCenterX(400 - getRadius());
                 setCenterY(380);
                 Controller.isPlaying = false;
@@ -157,15 +149,15 @@ public class Ball2 extends Circle {
                 if (ballAtBrickXVertically(gridX[14])) xVERT = 15;
                 if (ballOutsideBrickXVertically())     xVERT = 0;
             }
-            
+
             if (yHOR >= 1 && xHOR >= 1) {
                 if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))) != null) {
                     noiceMaker(SMASH_SOUND);
                     gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))));
                     Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
                     bricksLeft--;
-                    speedX = -speedX;
-                    initialXspeed = -initialXspeed;
+                    speedX = (!superBall ? -speedX : speedX);
+                    Controller.score += (!superBall ? 4 : 1);
                     if(!Controller.powerUP){
                         Random rand = new Random();
                         int lucky = rand.nextInt(20);
@@ -177,11 +169,19 @@ public class Ball2 extends Circle {
             if (yVERT >= 1 && xVERT >= 1) {
                 if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))) != null) {
                     noiceMaker(SMASH_SOUND);
-                    gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))));
-                    Brick.bricks.set(((15 * (yVERT - 1)) + (xVERT - 1)), null);
-                    bricksLeft--;
-                    speedY = -speedY;
-                    initialYspeed = -initialYspeed;
+                    if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).getFill() == Color.DARKBLUE){
+                        Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).setFill(Color.WHITE);
+                    } else if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).getFill() == Color.WHITE){
+                        Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).setFill(Color.RED);
+                    } else if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).getFill() == Color.SKYBLUE) {
+                        Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).setFill(Color.ROSYBROWN);
+                    } else {
+                        gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))));
+                        Brick.bricks.set(((15 * (yVERT - 1)) + (xVERT - 1)), null);
+                        bricksLeft--;
+                    }
+                    speedY = (!superBall ? -speedY : speedY);
+                    Controller.score += (!superBall ? 3 : 1);
                     if(!Controller.powerUP){
                         Random rand = new Random();
                         int lucky = rand.nextInt(20);
@@ -189,7 +189,7 @@ public class Ball2 extends Circle {
                     }
                 }
             }
-            
+
             if (((getCenterY() >= gamePaddle.getY()-getRadius()) && (getCenterY() <= 520))){
                 boolean xx = ((getCenterX() > (gamePaddle.getX() - getRadius())) && (getCenterX() < (gamePaddle.getX() + gamePaddle.getWidth() + getRadius())));
                 boolean yy = ((getCenterY() < gamePaddle.getY() + getRadius() + gamePaddle.getHeight()) && (getCenterY() > gamePaddle.getY() - getRadius()));
@@ -202,8 +202,11 @@ public class Ball2 extends Circle {
                     initialXspeed = -initialXspeed;
                 }
                 if (xx && (top && ballMovingDown())) {
+                    double angledXSpeed = ((getCenterX()-(gamePaddle.getX()+(gamePaddle.getWidth()/2)))/(gamePaddle.getWidth()/2));
+                    double angledYSpeed = (2-Math.abs(angledXSpeed)*0.7);
                     noiceMaker(PAD_SOUND);
-                    speedY = -speedY;
+                    speedY = angledYSpeed;
+                    speedX = startXspeed*(angledXSpeed*1.1);
                     initialYspeed = -initialYspeed;
                 }
             }
@@ -229,15 +232,18 @@ public class Ball2 extends Circle {
                             powerUpTimer = 0;
                             gamePaddle.setFill(Color.GOLDENROD);
                             gamePaddle.setWidth(70);
-                            speedX = startXspeed;
-                            speedY = startYspeed;
+                            gamePaddle.setStroke(Color.DODGERBLUE);
+                            setFill(Color.web("0x009FFF"));
+                            setStroke(Color.WHITE);
+                            setStrokeWidth(1);
+                            superBall = false;
                             Controller.powerUpInfo.setText("");
                             gameWindow.getChildren().removeAll(Controller.powerUpInfo);
                             Controller.powerUP = false;
                         }
                         setCenterY(420);
                         setCenterX(420);
-                        speedX = (startXspeed+0.1);
+                        speedX = startXspeed;
                         speedY = startYspeed;
                         Controller.lives--;
                         Controller.ballsRemainginLabel.setText(String.valueOf(Controller.lives));
@@ -263,19 +269,19 @@ public class Ball2 extends Circle {
     private boolean ballOutsideBrickYHorizontally(){return ((getCenterY() < gridY[0]) || (getCenterY() > (gridY[9] + Brick.BRICK_HEIGHT))); }
     private boolean ballOutsideBrickXVertically() { return ((getCenterX() < gridX[0]) || (getCenterX() > (gridX[14] + Brick.BRICK_WIDTH))); }
     private boolean ballOutsideBrickX() {           return (((getCenterX() + ( getRadius() ) ) < gridX[0]) || ((getCenterX() - ( getRadius() ) ) > (gridX[14] + Brick.BRICK_WIDTH))); }
-    
+
     private boolean ballAtBrickXRight(int i) {      return ((getCenterX() + ( getRadius() +1.5)  >= i)  && (getCenterX() + ( getRadius() +1.5)  <= i + Brick.BRICK_WIDTH)); }
     private boolean ballAtBrickXLeft(int i) {       return ((getCenterX() - ( getRadius() +1.5)  >= i)  && (getCenterX() - ( getRadius() +1.5)  <= i + Brick.BRICK_WIDTH)); }
     private boolean ballAtBrickXVertically(int i) { return ((getCenterX() >= i)  && ((getCenterX() <= i  + Brick.BRICK_WIDTH)));}
     private boolean ballAtBrickYHorizontally(int i){return ((getCenterY() >= i)  && (getCenterY() <= i + Brick.BRICK_HEIGHT)); }
     private boolean ballAtBrickYUp(int i){          return ((getCenterY() + ( getRadius() +1.5)  >= i)  && (getCenterY() + ( getRadius() +1.5)  <= i + Brick.BRICK_HEIGHT)); }
     private boolean ballAtBrickDown(int i){         return ((getCenterY() - ( getRadius() +1.5)  >= i)  && (getCenterY() - ( getRadius() +1.5)  <= i + Brick.BRICK_HEIGHT)); }
-    
+
     private boolean ballMovingUp(){                 return speedY > 0; }
     private boolean ballMovingDown(){               return speedY < 0; }
     private boolean ballMovingLeft(){               return speedX < 0; }
     private boolean ballMovingRight(){              return speedX > 0; }
-    
+
     public static void noiceMaker(Media sound) {
         if (sound != null){
             Controller.jukeBox = new MediaPlayer(sound);

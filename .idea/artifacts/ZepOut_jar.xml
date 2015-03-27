@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ZepOut:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ZepOut_jar</output-path>
+    <root id="archive" name="BreakOut.jar">
+      <element id="module-output" name="BreakOut" />
+    </root>
+  </artifact>
+</component>
