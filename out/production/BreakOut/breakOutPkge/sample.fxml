@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="playWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="breakOutPkge.Controller">
+    <children>
+        <Pane fx:id="gameWindow" layoutX="250.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="800.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+               <Label fx:id="clickToPlayLabel" layoutX="174.0" layoutY="156.0" style="-fx-font-size: 60; -fx-font-weight: bold;" text="[ Zepurs BreakOut ]" textAlignment="CENTER">
+               <textFill>
+                  <LinearGradient endX="0.6980120203421174" endY="0.12612112806287565" startX="0.7095238095238094" startY="1.0">
+                     <stops>
+                        <Stop color="#009fff" />
+                        <Stop color="#009fff" offset="0.4325337331334332" />
+                        <Stop color="WHITE" offset="0.5956825508814217" />
+                        <Stop color="#009fff" offset="0.7624521072796935" />
+                        <Stop color="#00a1ff" offset="0.9347079037800686" />
+                        <Stop color="#00a1ff" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </textFill></Label>
+            <Rectangle fx:id="startButton" arcHeight="40.0" arcWidth="40.0" height="200.0" layoutX="350.0" layoutY="293.0" onMousePressed="#setup" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0">
+               <fill>
+                  <RadialGradient centerX="0.5" centerY="0.5" focusAngle="-50.91" focusDistance="0.37209302325581417" radius="0.5465116279069768">
+                     <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="WHITE" offset="0.007662835249042145" />
+                        <Stop color="#009fff" offset="0.4674329501915709" />
+                        <Stop color="#ffffff00" offset="0.9003831417624519" />
+                        <Stop color="#ffffff00" offset="0.946360153256705" />
+                        <Stop color="#ffffff00" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill></Rectangle>
+            <Label fx:id="clickLabel" layoutX="450.0" layoutY="358.0" text="[ click ]" onMousePressed="#setup" textFill="#009fff" />
+            </children></Pane>
+    </children>
+</AnchorPane>

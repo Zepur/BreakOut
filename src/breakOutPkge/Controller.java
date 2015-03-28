@@ -16,9 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -41,15 +39,11 @@ public class Controller {
     @FXML
     Rectangle startButton;
 
-    static Image unmuted                = new Image("http://lolcipher.com/pix/javafx/unmuted.png");
-    static Image muted                  = new Image("http://lolcipher.com/pix/javafx/muted.png");
     static Image back1                  = new Image("http://lolcipher.com/pix/javafx/backjack.jpg");
     static Image back2                  = new Image("http://lolcipher.com/pix/javafx/backsolar.jpg");
     static Image back3                  = new Image("http://lolcipher.com/pix/javafx/backnorge.jpg");
     static Image legend                 = new Image("http://lolcipher.com/pix/javafx/legend.png");
     static ImageView legendImg          = new ImageView(legend);
-    static ImagePattern unmutedIMG      = new ImagePattern(unmuted);
-    static ImagePattern mutedIMG        = new ImagePattern(muted);
     static Button easyButton            = new Button("[ play ]");
     static Button bigButton             = new Button();
     static Label bigLabel               = new Label();
@@ -63,15 +57,13 @@ public class Controller {
     static Label bricksLeftLabel        = new Label("150");
     static Label scoreInfoLabel         = new Label("score:");
     static Label scoreLabel             = new Label("0");
-    public static Rectangle muteButton  = new Rectangle();
     public static Rectangle pauseRect   = new Rectangle();
     public static int lives             = 3;
     public static int levelNumber       = 1;
     public static int score             = 1;
     public static Circle powerUPcircle;
     static ImageView background;
-    public static MediaPlayer jukeBox;
-    public static boolean isPlaying, powerUP, isMuted, isPaused;
+    public static boolean isPlaying, powerUP, isPaused;
     static Ball2 ball;
     static Paddle gamePaddle;
     static Timeline powerUpAnimation;
@@ -111,17 +103,10 @@ public class Controller {
                 isPaused = !isPaused;
                 pause(gameWindow);
             }
-            if(e.getCode() == KeyCode.M) { muteUnmute(); }
             if(e.getCode() == KeyCode.ESCAPE) { System.exit(0); }
             if(e.getCode() == KeyCode.R) { System.out.println("restarting");
             }
         });
-
-        muteButton.setWidth(30);
-        muteButton.setHeight(30);
-        muteButton.setLayoutX((gameWindow.getWidth() - muteButton.getWidth()) / 2);
-        muteButton.setLayoutY(650);
-        muteButton.setFill(unmutedIMG);
 
         bigLabel.setLayoutX(700);
         bigLabel.setLayoutY(608);
@@ -147,7 +132,6 @@ public class Controller {
 
         gameWindow.getChildren().add(legendImg);
         gameWindow.getChildren().add(gamePaddle);
-        gameWindow.getChildren().add(muteButton);
         gameWindow.getChildren().add(bigLabel);
 
         bricksLeftInfoLabel.setLayoutX(30);
@@ -263,11 +247,6 @@ public class Controller {
         for(int i : randomBricksShuffled){
             Brick.bricks.set(i, null);
         }
-    }
-
-    public static void muteUnmute(){
-        isMuted = !isMuted;
-        muteButton.setFill((isMuted ? mutedIMG : unmutedIMG));
     }
 
     public static void pause(Pane gameWindow) {

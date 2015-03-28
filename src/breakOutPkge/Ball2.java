@@ -3,8 +3,6 @@ package breakOutPkge;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
@@ -12,9 +10,6 @@ import javafx.util.Duration;
 import java.util.Random;
 
 public class Ball2 extends Circle {
-    public final Media BOUNDS_SOUND = new Media(getClass().getResource("plink.mp3").toString());
-    public final Media PAD_SOUND = new Media(getClass().getResource("plinklo.mp3").toString());
-    public final Media SMASH_SOUND = new Media(getClass().getResource("smash.mp3").toString());
     double xPos, yPos, speedY, speedX;
     public static double initialXspeed, initialYspeed, startXspeed, startYspeed;
     static final double RADIUS = 8;
@@ -152,10 +147,17 @@ public class Ball2 extends Circle {
 
             if (yHOR >= 1 && xHOR >= 1) {
                 if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))) != null) {
-                    noiceMaker(SMASH_SOUND);
-                    gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))));
-                    Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
-                    bricksLeft--;
+                    if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))).getFill() == Color.DARKBLUE){
+                        Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))).setFill(Color.WHITE);
+                    } else if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))).getFill() == Color.WHITE){
+                        Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))).setFill(Color.RED);
+                    } else if(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))).getFill() == Color.SKYBLUE) {
+                        Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))).setFill(Color.ROSYBROWN);
+                    } else {
+                        gameWindow.getChildren().remove(Brick.bricks.get(((15 * (yHOR - 1)) + (xHOR - 1))));
+                        Brick.bricks.set(((15 * (yHOR - 1)) + (xHOR - 1)), null);
+                        bricksLeft--;
+                    }
                     speedX = (!superBall ? -speedX : speedX);
                     Controller.score += (!superBall ? 4 : 1);
                     if(!Controller.powerUP){
@@ -168,7 +170,6 @@ public class Ball2 extends Circle {
 
             if (yVERT >= 1 && xVERT >= 1) {
                 if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))) != null) {
-                    noiceMaker(SMASH_SOUND);
                     if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).getFill() == Color.DARKBLUE){
                         Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).setFill(Color.WHITE);
                     } else if(Brick.bricks.get(((15 * (yVERT - 1)) + (xVERT - 1))).getFill() == Color.WHITE){
@@ -197,15 +198,12 @@ public class Ball2 extends Circle {
                 boolean right = (((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getX())) <= 1) && ((ballPosLEFT - (gamePaddle.getWidth() + gamePaddle.getX())) >= -1));
                 boolean top = (ballPosDOWN >= gamePaddle.getY());
                 if (((right && ballMovingLeft()) || (left && ballMovingRight())) && yy) {
-                    noiceMaker(PAD_SOUND);
                     speedX = -speedX;
                     initialXspeed = -initialXspeed;
                 }
                 if (xx && (top && ballMovingDown())) {
                     double angledXSpeed = ((getCenterX()-(gamePaddle.getX()+(gamePaddle.getWidth()/2)))/(gamePaddle.getWidth()/2));
-                    double angledYSpeed = (2-Math.abs(angledXSpeed)*0.7);
-                    noiceMaker(PAD_SOUND);
-                    speedY = angledYSpeed;
+                    speedY = (2-Math.abs(angledXSpeed)*0.7);;
                     speedX = startXspeed*(angledXSpeed*1.1);
                     initialYspeed = -initialYspeed;
                 }
@@ -217,12 +215,10 @@ public class Ball2 extends Circle {
                 boolean atBottomBorder = getCenterY() > 555;
                 boolean atTopBorder = ballPosTOP <= 1;
                 if (atRightBorder || atLeftBorder) {
-                    noiceMaker(BOUNDS_SOUND);
                     speedX = -speedX;
                     initialXspeed = -initialXspeed;
                 }
                 if (atTopBorder) {
-                    noiceMaker(BOUNDS_SOUND);
                     speedY = -speedY;
                     initialYspeed = -initialYspeed;
                 }
@@ -281,13 +277,5 @@ public class Ball2 extends Circle {
     private boolean ballMovingDown(){               return speedY < 0; }
     private boolean ballMovingLeft(){               return speedX < 0; }
     private boolean ballMovingRight(){              return speedX > 0; }
-
-    public static void noiceMaker(Media sound) {
-        if (sound != null){
-            Controller.jukeBox = new MediaPlayer(sound);
-            Controller.jukeBox.setVolume((Controller.isMuted ? 0 : 100));
-            Controller.jukeBox.play();
-        }
-    }
 
 }
